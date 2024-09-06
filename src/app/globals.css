@@ -66,4 +66,30 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  * {
+    @apply !transition-all !duration-300;
+  }
+}
+
+.site--container {
+  @apply max-w-[1440px] mx-auto px-40;
+}
+
+/* Typography */
+
+.heading--1 {
+  @apply text-5xl;
+}
+
+.heading--2 {
+  @apply text-3xl lg:text-4xl;
+}
+
+.heading--4 {
+  @apply font-semibold text-xl lg:text-[1.750rem];
+}
+
+.error--message {
+  @apply text-red-700 text-sm pl-2;
 }
