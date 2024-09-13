@@ -5,21 +5,52 @@ import { LoginFormData } from "./types";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+
 import Link from "next/link";
 import { FaApple, FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
-import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { useSignInWithEmailAndPassword, useSignInWithGoogle } from "react-firebase-hooks/auth";
 import { auth } from "@/services/firebase.config";
 
 import Cookies from 'js-cookie';
 import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 export const LoginForm = () => {
   const { handleSubmit, register, formState: { errors } } = useForm<LoginFormData>();
   const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
+  const [signInWithGoogle] = useSignInWithGoogle(auth);
+  const { toast } = useToast();
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
 
+
+  // Login com o Google
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithGoogle();
+      if (result?.user) {
+        const idToken = await result.user.getIdToken();
+        Cookies.set("auth-token", idToken, { expires: 7 });
+        router.push("/feed");
+        toast({
+          title: "Login bem-sucedido com o Google!",
+        });
+      }
+    } catch (error) {
+      console.error("Google sign-in error:", error);
+      toast({
+        variant: "destructive",
+        title: "Erro ao fazer login com Google",
+        description: "Tente novamente mais tarde.",
+      });
+    }
+  }
+
+  // Login com Email e Senha
   const onSubmit: SubmitHandler<LoginFormData> = async (data: LoginFormData) => {
     try {
       const res = await signInWithEmailAndPassword(data.email, data.password);
@@ -27,6 +58,15 @@ export const LoginForm = () => {
         const idToken = await res.user.getIdToken();
         Cookies.set("auth-token", idToken, { expires: 7 });
         router.push("/feed");
+        toast({
+          title: "Login bem-sucedido!",
+        })
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Falha ao fazer login",
+          description: "Verifique suas credenciais e tente novamente.",
+        })
       }
     } catch (error) {
       console.error(error);
@@ -52,7 +92,7 @@ export const LoginForm = () => {
             {errors.email && errors.email.message}
           </p>
         </div>
-        <div className="grid gap-2">
+        <div className="grid gap-2 relative"> {/* Adiciona relative para posicionar o ícone */}
           <Link
             href="/forgot-password"
             className="ml-auto text-sm underline"
@@ -60,7 +100,22 @@ export const LoginForm = () => {
             Esqueceu a senha?
           </Link>
           <Label htmlFor="password">Password</Label>
-          <Input id="password" {...register("password", { required: "Preencha o campo de Senha" })} type="password" placeholder="Digitei sua Senha" />
+          <div className="flex items-center">
+            <Input
+              id="password"
+              {...register("password", { required: "Preencha o campo de Senha" })}
+              type={showPassword ? "text" : "password"}
+              placeholder="Digite sua Senha"
+              className="flex-1 pr-9"
+            />
+            <button
+              type="button"
+              className="absolute right-3" // Posiciona o ícone dentro do Input
+              onClick={() => setShowPassword(prev => !prev)}
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
           <p className="error--message">{errors.password && errors.password.message}</p>
         </div>
       </div>
@@ -73,7 +128,15 @@ export const LoginForm = () => {
         </div>
         <div className="grid grid-flow-col items-center flex-wrap gap-x-4 mt-5">
           <Button size="lg" variant="secondary" className="py-8 group"><FaFacebook color="blue" className="lg:group-hover:size-9" size="28" /></Button>
-          <Button size="lg" variant="secondary" className="py-8 group"><FcGoogle size="28" className="lg:group-hover:size-9" /></Button>
+          <Button
+            type="button"
+            size="lg"
+            variant="secondary"
+            className="py-8 group"
+            onClick={() => handleGoogleSignIn()}
+          >
+            <FcGoogle size="28" className="lg:group-hover:size-9" />
+          </Button>
           <Button size="lg" variant="secondary" className="py-8 group"><FaApple size="28" className="lg:group-hover:size-9" /></Button>
         </div>
       </div>
