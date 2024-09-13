@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
 
   // Definindo rotas privadas e para usuários não autenticados
-  const privatePaths = ["/create-service/", "/edit-service", "/feed"];
+  const privatePaths = ["/feed", "/myservices/new", "/myservices/edit", "/profile" ];
   const unauthenticatedPaths = ["/login", "/register"];
 
   if (privatePaths.some(path => url.pathname.startsWith(path))) {

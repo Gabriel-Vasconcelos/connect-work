@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const LoginPage = () => {
   return (
-    <main className="site--container grid gap-x-24 my-20 lg:grid-cols-2">
+    <main className="grid gap-x-24 my-20 lg:grid-cols-2 md:px-20 px-10">
       <section className="">
         <LoginForm />
       </section>
