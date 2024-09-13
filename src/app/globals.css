@@ -63,6 +63,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -73,7 +74,7 @@
 }
 
 .site--container {
-  @apply max-w-[1440px] mx-auto px-40;
+  @apply px-7 max-w-[1440px] mx-auto lg:px-40;
 }
 
 /* Typography */

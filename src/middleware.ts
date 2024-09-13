@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import { privatePaths, unauthenticatedPaths } from "./constants/routes";
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("auth-token");
   const url = request.nextUrl.clone();
-
-  // Definindo rotas privadas e para usuários não autenticados
-  const privatePaths = ["/feed", "/myservices/new", "/myservices/edit", "/profile" ];
-  const unauthenticatedPaths = ["/login", "/register"];
 
   if (privatePaths.some(path => url.pathname.startsWith(path))) {
     if (!token) {
