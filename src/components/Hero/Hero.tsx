@@ -4,9 +4,9 @@ import Image from "next/image";
 
 export const Hero = () => {
   return (
-    <section className="max-lg:text-center grid gap-x-10 items-center lg:grid-cols-2">
-      <div className="max-lg:items-center site--container flex flex-col">
-        <h1 className="max-lg:items-center flex flex-col justify-center text-8xl font-bold -translate-x-2">
+    <section className="max-xl:text-center grid gap-x-10 items-center xl:grid-cols-2">
+      <div className="max-xl:items-center site--container flex flex-col">
+        <h1 className="max-xl:items-center flex flex-col justify-center text-8xl font-bold -translate-x-2">
           <span className="text-sky-600">Conecte.</span>
           <span className="text-sky-600">Simplifique.</span>
           <span className="text-sky-950">Cresça.</span>
@@ -18,7 +18,7 @@ export const Hero = () => {
       </div>
 
       <div>
-        <Image className="max-lg:hidden w-full h-screen object-cover" alt="Hero Image" src="/assets/hero-image.png" width="1000" height="1753" />
+        <Image className="max-xl:hidden w-full h-screen object-cover" alt="Hero Image" src="/assets/hero-image.png" width="1000" height="1753" />
       </div>
     </section>
   )
