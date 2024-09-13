@@ -236,7 +236,7 @@ export default function New() {
             {/* Botão de enviar */}
             <div className="col-span-2 flex justify-center mt-8">
               <Button type="submit" className="bg-cyan-500 text-white w-full max-w-md py-3 rounded-full text-2xl font-semibold hover:bg-cyan-700 transition duration-200">
-                Criar
+                Criar Serviço
               </Button>
             </div>
           </form>
