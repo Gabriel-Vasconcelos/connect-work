@@ -14,7 +14,7 @@ export const Hero = () => {
         <p className="mt-10 text-xl max-w-[450px]">
           Na <span className="text-sky-600">Connect Work</span>,
           nossa missão é conectar empresas e simplificar a busca por serviços, criando um ecossistema eficiente e confiável que impulsiona parcerias valiosas e duradouras.</p>
-        <Link className="w-full" href="/register" title="Cadastre-se"><Button size="lg" className="mt-6 w-full max-w-72 text-lg py-7">Cadastrar</Button></Link>
+        <Link className="w-full" href="/register" title="Cadastre-se"><Button size="lg" className="mt-6 w-full max-w-72 text-2xl py-7 bg-cyan-500 hover:bg-cyan-700 transition duration-200">Cadastrar</Button></Link>
       </div>
 
       <div>
