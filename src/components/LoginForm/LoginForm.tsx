@@ -6,24 +6,41 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { FaApple, FaFacebook, FaGoogle } from "react-icons/fa";
+import { FaApple, FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { auth } from "@/services/firebase.config";
+
+import Cookies from 'js-cookie';
+import { useRouter } from "next/navigation";
 
 export const LoginForm = () => {
   const { handleSubmit, register, formState: { errors } } = useForm<LoginFormData>();
+  const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
+  const router = useRouter();
 
-  const onSubmit: SubmitHandler<LoginFormData> = (data: LoginFormData) => {
-
+  const onSubmit: SubmitHandler<LoginFormData> = async (data: LoginFormData) => {
+    try {
+      const res = await signInWithEmailAndPassword(data.email, data.password);
+      if (res?.user) {
+        const idToken = await res.user.getIdToken();
+        Cookies.set("auth-token", idToken, { expires: 7 });
+        router.push("/feed");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const onError: SubmitErrorHandler<LoginFormData> = (errors) => {
-
+    console.error(errors)
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit, onError)} className="grid">
       <h1 className="text-4xl mx-auto font-bold">Login</h1>
-      <p className="text-lg mt-2 mb-8 flex justify-center gap-x-1">
+      <p className="text-lg mt-2 mb-8 flex justify-center items-center flex-wrap gap-x-1">
         <span className="opacity-60">Não possui uma conta? </span>
         <Link href="/register" className="opacity-60 text-sky-600 w-fit lg:hover:opacity-100" title="cadastre-se">Cadastre-se aqui!</Link>
       </p>
@@ -54,7 +71,7 @@ export const LoginForm = () => {
           <p >ou continue com</p>
           <hr />
         </div>
-        <div className="grid grid-cols-3 gap-x-4 mt-5">
+        <div className="grid grid-flow-col items-center flex-wrap gap-x-4 mt-5">
           <Button size="lg" variant="secondary" className="py-8 group"><FaFacebook color="blue" className="lg:group-hover:size-9" size="28" /></Button>
           <Button size="lg" variant="secondary" className="py-8 group"><FcGoogle size="28" className="lg:group-hover:size-9" /></Button>
           <Button size="lg" variant="secondary" className="py-8 group"><FaApple size="28" className="lg:group-hover:size-9" /></Button>
