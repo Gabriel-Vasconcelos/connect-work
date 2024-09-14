@@ -86,7 +86,7 @@ export default function New() {
       <div className="pt-28 md:pt-6 md:ml-64 md:mt-0 p-6 bg-[#082F49] min-h-screen overflow-x-hidden">
         <div className="max-w-4xl mx-auto">
           {/* Título com Ícone e Linha Centralizado */}
-          <div className="flex flex-col items-center mb-6">
+          <div className="flex flex-col items-center mb-6 md:mt-8">
             <div className="flex items-center mb-2">
               <NotebookPen className="text-white mr-2" size={26} /> {/* Ícone ao lado do título */}
               <h1 className="text-3xl font-bold text-white">Criar Serviço</h1>
@@ -96,7 +96,7 @@ export default function New() {
           </div>
 
           {/* Formulário */}
-          <form onSubmit={handleSubmit(onSubmit, onError)} className="flex flex-col md:grid md:grid-cols-2 gap-5 mb-4 mt-14">
+          <form onSubmit={handleSubmit(onSubmit, onError)} className="flex flex-col md:grid md:grid-cols-2 gap-5 gap-x-12 mb-4 mt-14 md:ml-4">
             {/* Input Título do Serviço */}
             <div className="col-span-2 md:col-span-1">
               <Label htmlFor="serviceTitle" className="block text-sm font-medium text-white">
@@ -134,7 +134,7 @@ export default function New() {
             {/* Campo Modelo */}
             <div>
               <Label htmlFor="model" className="block text-sm font-medium text-white">
-                Modelo (presencial ou remoto)
+                Modelo
               </Label>
               <Input
                 id="model"

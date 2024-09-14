@@ -5,7 +5,7 @@ import { FileText, NotebookPen, UserRound, CircleArrowOutDownRight } from 'lucid
 export default function Menu() {
 
     return (
-        <div className="w-full md:w-auto bg-cyan-50 fixed md:h-full h-auto overflow-auto z-50">
+        <div className="w-full md:w-auto bg-white fixed md:h-full h-auto overflow-auto z-50">
 
             <div className="hidden sm:flex">
 

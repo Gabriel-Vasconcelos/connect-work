@@ -128,7 +128,7 @@ export default function EditService() {
 
             <div className="pt-28 md:pt-6 md:ml-64 md:mt-0 p-6 bg-[#082F49] min-h-screen overflow-x-hidden">
                 <div className="max-w-4xl mx-auto">
-                    <div className="flex flex-col items-center mb-6">
+                    <div className="flex flex-col items-center mb-6 md:mt-8">
                         <div className="flex items-center mb-2">
                             <NotebookPen className="text-white mr-2" size={26} />
                             <h1 className="text-3xl font-bold text-white">
@@ -138,7 +138,7 @@ export default function EditService() {
                         <div className="w-1/2 md:w-1/4 border-b-2 border-white"></div>
                     </div>
 
-                    <form onSubmit={handleSubmit(onSubmit, onError)} className="flex flex-col md:grid md:grid-cols-2 gap-5 mb-4 mt-14">
+                    <form onSubmit={handleSubmit(onSubmit, onError)} className="flex flex-col md:grid md:grid-cols-2 gap-5 gap-x-12 mb-4 mt-14 md:ml-4">
                         <div>
                             <Label htmlFor="serviceTitle" className="block text-sm font-medium text-white">Título do Serviço</Label>
                             <Input id="serviceTitle" {...register("serviceTitle")} type="text" placeholder="Digite o título do serviço" className="mt-1 p-2 rounded w-full" />
@@ -190,7 +190,7 @@ export default function EditService() {
                         </div>
                         <div className="col-span-2">
                             <Label htmlFor="description" className="block text-sm font-medium text-white">Descrição do serviço</Label>
-                            <textarea id="description" {...register("description")} placeholder="Descrição detalhada do serviço" className="mt-1 p-2 rounded w-full"></textarea>
+                            <textarea id="description" {...register("description")} placeholder="Descrição detalhada do serviço" className="mt-1 p-2 border rounded w-full" rows={4}></textarea>
                             <p className="error--message mt-1">
                                 {errors.description && errors.description.message}
                             </p>
