@@ -135,7 +135,7 @@ export default function EditService() {
                                 Editar Serviço
                             </h1>
                         </div>
-                        <div className="w-1/2 md:w-1/4 border-b-2 border-white"></div>
+                        <div className="w-1/2 md:w-64 border-b-2 border-white"></div>
                     </div>
 
                     <form onSubmit={handleSubmit(onSubmit, onError)} className="flex flex-col md:grid md:grid-cols-2 gap-5 gap-x-12 mb-4 mt-14 md:ml-4">
@@ -196,7 +196,7 @@ export default function EditService() {
                             </p>
                         </div>
                         <div className="col-span-2 flex justify-center mt-8">
-                            <Button type="submit" className="bg-cyan-500 text-white w-full max-w-md py-3 rounded-full text-2xl font-semibold hover:bg-cyan-700 transition duration-200">
+                            <Button type="submit" className="bg-cyan-500 text-white w-full max-w-md py-3 rounded-full text-lg md:text-2xl font-semibold hover:bg-cyan-700 transition duration-200">
                                 Editar Serviço
                             </Button>
                         </div>

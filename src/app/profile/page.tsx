@@ -36,7 +36,7 @@ export default function New() {
             <div className="pt-28 md:pt-6 md:ml-64 md:mt-0 p-6 bg-[#082F49] min-h-screen overflow-x-hidden">
                 <div className="max-w-4xl mx-auto">
                     {/* Título com Ícone e Linha Centralizado */}
-                    <div className="flex flex-col items-center mb-6">
+                    <div className="flex flex-col items-center mb-12 md:mt-8">
                         <div className="flex items-center mb-2">
                             <UserRound className="text-white mr-2" size={26} /> {/* Ícone ao lado do título */}
                             <h1 className="text-3xl font-bold text-white">
@@ -55,7 +55,7 @@ export default function New() {
                     </div>
 
                     {/* Inputs */}
-                    <form onSubmit={handleSubmit(onSubmit, onError)} className="flex flex-col md:grid md:grid-cols-2 gap-5 mb-4 mt-14">
+                    <form onSubmit={handleSubmit(onSubmit, onError)} className="flex flex-col md:grid md:grid-cols-2 gap-5 gap-x-12 mb-4 mt-14">
 
                         <div>
                             <Label htmlFor="companyName" className="block text-sm font-medium text-white">Nome da Empresa</Label>
@@ -126,7 +126,7 @@ export default function New() {
                         </div>
 
                         <div className="col-span-2 flex justify-center mt-8">
-                            <Button type="submit" className="bg-cyan-500 text-white w-full max-w-md py-3 rounded-full text-2xl font-semibold hover:bg-cyan-700 transition duration-200">
+                            <Button type="submit" className="bg-cyan-500 text-white w-full max-w-md py-3 rounded-full text-lg md:text-2xl font-semibold hover:bg-cyan-700 transition duration-200">
                                 Editar perfil
                             </Button>
                         </div>
