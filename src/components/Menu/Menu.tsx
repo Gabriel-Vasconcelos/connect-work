@@ -5,7 +5,7 @@ import { FileText, NotebookPen, UserRound, CircleArrowOutDownRight } from 'lucid
 export default function Menu() {
     return (
         <div className="w-full md:w-auto bg-white fixed md:h-full h-auto overflow-auto z-50 shadow-lg">
-            {/* Imagem e informações da empresa */}
+            {/* Imagem e informações da empresa com sombra */}
             <div className="hidden sm:flex items-center p-5">
                 <Image
                     src="/assets/Saly-10.png"
@@ -22,7 +22,7 @@ export default function Menu() {
 
             {/* Links do Menu */}
             <div className="flex flex-row md:flex-col md:justify-start">
-                <div className="flex md:flex-col w-full md:mt-7">
+                <div className="flex md:flex-col w-full md:mt-5">
                     <MenuItem href="/feed" icon={FileText} text="Feed de Serviços" />
                     <MenuItem href="/" icon={NotebookPen} text="Meus serviços" />
                     <MenuItem href="/profile" icon={UserRound} text="Meu Perfil" />
@@ -36,7 +36,7 @@ export default function Menu() {
 // Componente reutilizável para links do menu
 function MenuItem({ href, icon: Icon, text }: { href: string, icon: any, text: string }) {
     return (
-        <Link href={href} className="group relative flex items-center p-3 md:p-4 text-cyan-800 font-bold transition duration-300 hover:bg-cyan-950 hover:text-white w-full">
+        <Link href={href} className="group relative flex items-center p-3 md:p-4 md:pl-6 text-cyan-800 font-bold transition duration-300 hover:bg-cyan-950 hover:text-white w-full">
             <span className="absolute left-0 h-full w-1 bg-transparent group-hover:bg-cyan-600 transition-all duration-300"></span>
             <Icon className="mr-3 hidden sm:block" size={24} />
             {text}
@@ -47,7 +47,7 @@ function MenuItem({ href, icon: Icon, text }: { href: string, icon: any, text: s
 // Componente para o botão "Sair"
 function MenuItemButton({ text, icon: Icon }: { text: string, icon: any }) {
     return (
-        <button className="group relative flex items-center p-3 md:p-4 text-cyan-800 font-bold transition duration-300 hover:bg-cyan-950 hover:text-white w-full">
+        <button className="group relative flex items-center p-3 md:p-4 md:pl-6 text-cyan-800 font-bold transition duration-300 hover:bg-cyan-950 hover:text-white w-full">
             <span className="absolute left-0 h-full w-1 bg-transparent group-hover:bg-cyan-600 transition-all duration-300"></span>
             <Icon className="mr-3 hidden sm:block" size={24} />
             {text}
