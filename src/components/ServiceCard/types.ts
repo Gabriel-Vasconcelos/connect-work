@@ -5,6 +5,7 @@ export type ServiceCardProps = {
     tags: string[];
     serviceTitle: string;
     city: string;
+    state: string;
     postedDaysAgo: number;
     description: string;
     className?: string;

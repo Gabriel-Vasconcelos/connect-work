@@ -11,6 +11,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
     tags,
     serviceTitle,
     city,
+    state,
     postedDaysAgo,
     description,
     className
@@ -33,17 +34,21 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
 
             <CardContent className="flex-1">
                 <div className="flex flex-wrap gap-2 mb-2">
-                    {tags.map((tag, index) => (
-                        <Badge key={index} className="bg-blue-500 text-white rounded-full">
-                            {tag}
-                        </Badge>
-                    ))}
+                    {tags.length > 0 ? (
+                        tags.map((tag, index) => (
+                            <Badge key={index} className="bg-cyan-800 text-white rounded">
+                                {tag}
+                            </Badge>
+                        ))
+                    ) : (
+                        <p className="text-gray-500">Nenhuma tag disponível</p>
+                    )}
                 </div>
 
                 <h3 className="text-xl font-semibold text-black mb-2">{serviceTitle}</h3>
 
                 <p className="text-sm text-gray-500 mb-2">
-                    {city} / postada há {postedDaysAgo} dias
+                    {city} - {state} / postada há {postedDaysAgo} dias
                 </p>
 
                 <p className="text-base text-black mb-4 line-clamp-3">
@@ -52,7 +57,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
             </CardContent>
 
             <CardFooter>
-                <Button className="bg-blue-500 text-white w-full">
+                <Button className="bg-cyan-500 font-semibold hover:bg-cyan-700 transition duration-200 text-white w-full">
                     Saiba mais
                 </Button>
             </CardFooter>
