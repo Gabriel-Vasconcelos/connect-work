@@ -117,9 +117,9 @@ export default function Feed() {
           <div className="flex flex-col items-center mb-14 md:mt-8">
             <div className="flex items-center mb-2">
               <FileText className="text-white mr-2" size={26} />
-              <h1 className="text-3xl font-bold text-white">Feed</h1>
+              <h1 className="text-3xl font-bold text-white">Feed de Serviços</h1>
             </div>
-            <div className="w-28 md:w-28 border-b-2 border-white"></div>
+            <div className="w-28 md:w-72 border-b-2 border-white"></div>
           </div>
 
           {/* Botão de Filtrar Serviços */}

@@ -126,7 +126,7 @@ export default function New() {
                         </div>
 
                         <div className="col-span-2 flex justify-center mt-8">
-                            <Button type="submit" className="bg-cyan-500 text-white w-full max-w-md py-3 rounded-full text-lg md:text-2xl font-semibold hover:bg-cyan-700 transition duration-200">
+                            <Button type="submit" className="bg-cyan-500 text-white w-full max-w-md py-3 text-lg md:text-2xl font-semibold hover:bg-cyan-700 transition duration-200">
                                 Editar perfil
                             </Button>
                         </div>

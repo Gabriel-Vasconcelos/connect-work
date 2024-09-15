@@ -92,7 +92,7 @@ export default function New() {
               <h1 className="text-3xl font-bold text-white">Criar Serviço</h1>
             </div>
             {/* Linha abaixo do título */}
-            <div className="w-1/2 md:w-1/4 border-b-2 border-white"></div>
+            <div className="w-1/2 md:w-56 border-b-2 border-white"></div>
           </div>
 
           {/* Formulário */}
@@ -174,7 +174,7 @@ export default function New() {
                 id="state"
                 {...register("state", { required: "Preencha o campo com o estado da sua empresa" })}
                 type="text"
-                placeholder="Estado da sua empresa"
+                placeholder="SP, RJ, MG, CE, BA..."
                 className="mt-1 p-2 rounded w-full"
               />
               <p className="error--message mt-1 text-red-500">
@@ -224,7 +224,7 @@ export default function New() {
               <textarea
                 id="description"
                 {...register("description", { required: "Preencha o campo com a descrição detalhada do serviço que necessita" })}
-                placeholder="Descreva o serviço"
+                placeholder="Descreva o serviço mais detalhadamente"
                 className="mt-1 p-2 border rounded w-full"
                 rows={4}
               ></textarea>
@@ -235,7 +235,7 @@ export default function New() {
 
             {/* Botão de enviar */}
             <div className="col-span-2 flex justify-center mt-8">
-              <Button type="submit" className="bg-cyan-500 text-white w-full max-w-md py-3 rounded-full text-lg md:text-2xl font-semibold hover:bg-cyan-700 transition duration-200">
+              <Button type="submit" className="bg-cyan-500 text-white w-full max-w-md py-6 text-lg md:text-2xl font-semibold hover:bg-cyan-700 transition duration-200">
                 Criar Serviço
               </Button>
             </div>

@@ -119,7 +119,7 @@ export const LoginForm = () => {
           <p className="error--message">{errors.password && errors.password.message}</p>
         </div>
       </div>
-      <Button size="lg" className="mt-10 font-semibold bg-cyan-500 hover:bg-cyan-700 transition duration-200 text-xl rounded-full">Entrar</Button>
+      <Button size="lg" className="mt-10 font-semibold bg-cyan-500 hover:bg-cyan-700 transition duration-200 text-xl">Entrar</Button>
       <div className="mt-10">
         <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-x-5">
           <hr />

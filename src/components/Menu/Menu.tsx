@@ -4,7 +4,7 @@ import { FileText, NotebookPen, UserRound, CircleArrowOutDownRight } from 'lucid
 
 export default function Menu() {
     return (
-        <div className="w-full md:w-56 lg:w-68 bg-white fixed md:h-full h-auto overflow-auto z-50 shadow-lg">
+        <div className="w-full md:w-56 lg:w-68 bg-white fixed md:h-full h-auto overflow-auto z-50">
             {/* Imagem e informações da empresa com sombra */}
             <div className="hidden sm:flex items-center p-4 md:p-3 lg:p-4">
                 <Image
@@ -36,8 +36,8 @@ export default function Menu() {
 // Componente reutilizável para links do menu
 function MenuItem({ href, icon: Icon, text }: { href: string, icon: any, text: string }) {
     return (
-        <Link href={href} className="group relative flex items-center p-3 md:p-3 lg:p-4 md:pl-4 lg:pl-4 text-cyan-800 font-semibold md:text-base lg:text-base transition duration-300 hover:bg-cyan-950 hover:text-white w-full">
-            <span className="absolute left-0 h-full w-1 bg-transparent group-hover:bg-cyan-600 transition-all duration-300"></span>
+        <Link href={href} className="group relative flex items-center p-3 md:p-3 lg:p-4 md:pl-4 lg:pl-4 text-cyan-800 font-semibold md:text-base lg:text-base transition transform hover:scale-105 w-full">
+            <span className="absolute left-0 h-full w-1 bg-transparent transition"></span>
             <Icon className="mr-3 hidden sm:block md:hidden lg:block" size={24} />
             {text}
         </Link>
@@ -47,8 +47,8 @@ function MenuItem({ href, icon: Icon, text }: { href: string, icon: any, text: s
 // Componente para o botão "Sair"
 function MenuItemButton({ text, icon: Icon }: { text: string, icon: any }) {
     return (
-        <button className="group relative flex items-center p-3 md:p-3 lg:p-4 md:pl-4 lg:pl-4 text-cyan-800 font-semibold md:text-base lg:text-base transition duration-300 hover:bg-cyan-950 hover:text-white w-full">
-            <span className="absolute left-0 h-full w-1 bg-transparent group-hover:bg-cyan-600 transition-all duration-300"></span>
+        <button className="group relative flex items-center p-3 md:p-3 lg:p-4 md:pl-4 lg:pl-4 text-cyan-800 font-semibold md:text-base lg:text-base transition duration-300 transform hover:scale-105 w-full">
+            <span className="absolute left-0 h-full w-1 bg-transparent transition-all duration-300"></span>
             <Icon className="mr-3 hidden sm:block md:hidden lg:block" size={24} />
             {text}
         </button>

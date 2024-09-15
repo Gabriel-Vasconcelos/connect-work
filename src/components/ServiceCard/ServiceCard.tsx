@@ -32,7 +32,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
                 </div>
             </CardHeader>
 
-            <CardContent className="flex-1">
+            <CardContent className="flex-1 space-y-4">
                 <div className="flex flex-wrap gap-2 mb-2">
                     {tags.length > 0 ? (
                         tags.map((tag, index) => (
