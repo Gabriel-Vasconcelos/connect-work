@@ -125,7 +125,7 @@ export default function Feed() {
           {/* Botão de Filtrar Serviços */}
           <Dialog>
             <DialogTrigger asChild>
-              <Button className="mb-4 text-lg bg-cyan-500 text-white font-semibold hover:bg-cyan-700 transition duration-200 flex items-center ml-auto">
+              <Button className="mb-4 text-lg bg-cyan-500 text-white font-semibold hover:bg-cyan-700 transition duration-200 flex items-center ml-auto mr-5">
                 <Filter className="mr-2" size={20} /> {/* Adicione o ícone */}
                 Filtros
               </Button>

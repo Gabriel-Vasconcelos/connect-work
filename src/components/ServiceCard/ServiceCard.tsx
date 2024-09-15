@@ -36,7 +36,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
                 <div className="flex flex-wrap gap-2 mb-2">
                     {tags.length > 0 ? (
                         tags.map((tag, index) => (
-                            <Badge key={index} className="bg-cyan-800 text-white rounded">
+                            <Badge key={index} className="bg-cyan-800 hover:bg-cyan-500 text-white rounded">
                                 {tag}
                             </Badge>
                         ))
