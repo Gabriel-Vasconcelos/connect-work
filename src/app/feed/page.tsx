@@ -20,9 +20,11 @@ export default function Feed() {
   const [tags, setTags] = useState("");
   const [services, setServices] = useState<ServiceFormData[]>([]);
   const [allServices, setAllServices] = useState<ServiceFormData[]>([]);
+  const [loading, setLoading] = useState(true); // Estado de carregamento
 
   useEffect(() => {
     const fetchServices = async () => {
+      setLoading(true); // Define o estado de carregamento como verdadeiro
       try {
         const serviceCollection = collection(db, "services");
         const querySnapshot = await getDocs(serviceCollection);
@@ -37,6 +39,8 @@ export default function Feed() {
         setServices(fetchedServices); // Inicialmente exibe todos os serviços
       } catch (error) {
         console.error("Erro ao buscar os serviços: ", error);
+      } finally {
+        setLoading(false); // Define o estado de carregamento como falso após o término da busca
       }
     };
 
@@ -119,7 +123,7 @@ export default function Feed() {
               <FileText className="text-white mr-2" size={26} />
               <h1 className="text-3xl font-bold text-white">Feed de Serviços</h1>
             </div>
-            <div className="w-28 md:w-72 border-b-2 border-white"></div>
+            <div className="w-72 border-b-2 border-white"></div>
           </div>
 
           {/* Botão de Filtrar Serviços */}
@@ -174,8 +178,10 @@ export default function Feed() {
           </Dialog>
 
           {/* Exibição dos Serviços */}
-          <div className="mt-12">
-            {services.length > 0 ? (
+          <div className="mt-12 mb-4">
+            {loading ? (
+              <p className="text-white font-bold text-center text-2xl">Buscando os serviços, aguarde...</p>
+            ) : services.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-16 mx-5">
                 {services.map((service, index) => {
                   const createdAtDate = service.createdAt instanceof Timestamp
