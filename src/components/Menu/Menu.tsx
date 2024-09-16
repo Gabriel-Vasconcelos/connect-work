@@ -6,7 +6,7 @@ export default function Menu() {
     return (
         <div className="w-full md:w-56 lg:w-68 bg-white fixed md:h-full h-auto overflow-auto z-50">
             {/* Imagem e informações da empresa com sombra */}
-            <div className="hidden sm:flex items-center p-4 md:p-3 lg:p-4">
+            <div className="hidden sm:flex items-center p-4 md:p-3 lg:p-4 border-b-2">
                 <Image
                     src="/assets/Saly-10.png"
                     alt="Imagem"
@@ -15,8 +15,8 @@ export default function Menu() {
                     className="block shadow-lg rounded-full object-cover"
                 />
                 <div className="ml-4 mt-3">
-                    <p className="text-sm md:text-sm lg:text-md font-bold text-cyan-800">Nome da Empresa</p>
-                    <p className="text-xs text-gray-500">email@empresa.com</p>
+                    <p className="text-md font-bold text-cyan-800">Empresa Teste</p>
+                    <p className="text-xs text-gray-500">Connect Work</p>
                 </div>
             </div>
 
@@ -36,7 +36,7 @@ export default function Menu() {
 // Componente reutilizável para links do menu
 function MenuItem({ href, icon: Icon, text }: { href: string, icon: any, text: string }) {
     return (
-        <Link href={href} className="group relative flex items-center p-3 md:p-3 lg:p-4 md:pl-4 lg:pl-4 text-cyan-800 font-semibold md:text-base lg:text-base transition transform hover:scale-105 w-full">
+        <Link href={href} className="group relative flex items-center p-3 md:p-3 lg:p-4 md:pl-4 lg:pl-4 text-cyan-800 font-semibold md:text-base lg:text-base transition transform hover:scale-95 w-full">
             <span className="absolute left-0 h-full w-1 bg-transparent transition"></span>
             <Icon className="mr-3 hidden sm:block md:hidden lg:block" size={24} />
             {text}
@@ -47,7 +47,7 @@ function MenuItem({ href, icon: Icon, text }: { href: string, icon: any, text: s
 // Componente para o botão "Sair"
 function MenuItemButton({ text, icon: Icon }: { text: string, icon: any }) {
     return (
-        <button className="group relative flex items-center p-3 md:p-3 lg:p-4 md:pl-4 lg:pl-4 text-cyan-800 font-semibold md:text-base lg:text-base transition duration-300 transform hover:scale-105 w-full">
+        <button className="group relative flex items-center p-3 md:p-3 lg:p-4 md:pl-4 lg:pl-4 text-cyan-800 font-semibold md:text-base lg:text-base transition duration-300 transform hover:scale-95 w-full">
             <span className="absolute left-0 h-full w-1 bg-transparent transition-all duration-300"></span>
             <Icon className="mr-3 hidden sm:block md:hidden lg:block" size={24} />
             {text}
