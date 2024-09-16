@@ -21,6 +21,7 @@ export default function Feed() {
   const [services, setServices] = useState<ServiceFormData[]>([]);
   const [allServices, setAllServices] = useState<ServiceFormData[]>([]);
   const [loading, setLoading] = useState(true); // Estado de carregamento
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // Estado para controle do Dialog
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -35,6 +36,10 @@ export default function Feed() {
           }
           return data;
         });
+
+        // Ordena os serviços pela data de criação mais recente
+        fetchedServices.sort((a, b) => (b.createdAt as Date).getTime() - (a.createdAt as Date).getTime());
+
         setAllServices(fetchedServices);
         setServices(fetchedServices); // Inicialmente exibe todos os serviços
       } catch (error) {
@@ -60,6 +65,7 @@ export default function Feed() {
 
     if (isFiltersEmpty) {
       setServices(allServices);
+      setIsDialogOpen(false); // Fechar o Dialog se não houver filtros preenchidos
       return;
     }
 
@@ -109,6 +115,7 @@ export default function Feed() {
 
     console.log("Serviços filtrados:", filtered);
     setServices(filtered);
+    setIsDialogOpen(false); // Fechar o Dialog após o filtro
   };
 
   return (
@@ -127,9 +134,12 @@ export default function Feed() {
           </div>
 
           {/* Botão de Filtrar Serviços */}
-          <Dialog>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="mb-4 text-lg bg-cyan-500 text-white font-semibold hover:bg-cyan-700 transition duration-200 flex items-center ml-auto mr-5">
+              <Button
+                className="mb-4 text-lg bg-cyan-500 text-white font-semibold hover:bg-cyan-700 transition duration-200 flex items-center ml-auto mr-5"
+                onClick={() => setIsDialogOpen(true)}
+              >
                 <Filter className="mr-2" size={20} /> {/* Adicione o ícone */}
                 Filtros
               </Button>
