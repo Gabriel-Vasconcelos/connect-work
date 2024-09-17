@@ -10,6 +10,7 @@ import Menu from "@/components/Menu/Menu";
 import { ServiceFormData } from "../myservices/new/types";
 import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ServiceCard } from "@/components/ServiceCard/ServiceCard"; // Ajuste o caminho conforme necessário
+import { PaginationComponent } from "@/components/Pagination/Pagination"; // Componente de Paginação
 
 export default function Feed() {
   const [serviceTitle, setServiceTitle] = useState("");
@@ -22,6 +23,8 @@ export default function Feed() {
   const [allServices, setAllServices] = useState<ServiceFormData[]>([]);
   const [loading, setLoading] = useState(true); // Estado de carregamento
   const [isDialogOpen, setIsDialogOpen] = useState(false); // Estado para controle do Dialog
+  const [currentPage, setCurrentPage] = useState(1); // Página atual
+  const servicesPerPage = 8; // Defina quantos serviços por página
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -118,6 +121,12 @@ export default function Feed() {
     setIsDialogOpen(false); // Fechar o Dialog após o filtro
   };
 
+  // Lógica de paginação
+  const totalPages = Math.ceil(services.length / servicesPerPage);
+  const indexOfLastService = currentPage * servicesPerPage;
+  const indexOfFirstService = indexOfLastService - servicesPerPage;
+  const currentServices = services.slice(indexOfFirstService, indexOfLastService);
+
   return (
     <div className="flex">
       <Menu />
@@ -191,9 +200,9 @@ export default function Feed() {
           <div className="mt-12 mb-4">
             {loading ? (
               <p className="text-white font-bold text-center text-2xl">Buscando os serviços, aguarde...</p>
-            ) : services.length > 0 ? (
+            ) : currentServices.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-16 mx-5">
-                {services.map((service, index) => {
+                {currentServices.map((service, index) => {
                   const createdAtDate = service.createdAt instanceof Timestamp
                     ? service.createdAt.toDate()
                     : (service.createdAt as Date);
@@ -221,6 +230,18 @@ export default function Feed() {
               <p className="text-white text-center">Nenhum serviço encontrado.</p>
             )}
           </div>
+
+          {/* Componente de Paginação */}
+          {services.length > servicesPerPage && (
+            <div className="mt-12 mb-12 text-white">
+              <PaginationComponent
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
+            </div>
+
+          )}
         </div>
       </div>
     </div>
