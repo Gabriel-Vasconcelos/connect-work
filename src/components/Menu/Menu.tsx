@@ -24,7 +24,7 @@ export default function Menu() {
             <div className="flex flex-row md:flex-col md:justify-start">
                 <div className="flex md:flex-col w-full md:mt-4 lg:mt-5">
                     <MenuItem href="/feed" icon={FileText} text="Feed de Serviços" />
-                    <MenuItem href="/" icon={NotebookPen} text="Meus serviços" />
+                    <MenuItem href="/myservices" icon={NotebookPen} text="Meus serviços" />
                     <MenuItem href="/profile" icon={UserRound} text="Meu Perfil" />
                     <MenuItemButton text="Sair" icon={CircleArrowOutDownRight} />
                 </div>
