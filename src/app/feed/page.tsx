@@ -5,7 +5,7 @@ import { collection, getDocs, Timestamp } from "firebase/firestore";
 import { db } from "@/services/firebase.config";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { FileText, Filter } from "lucide-react";
+import { FileText, Filter, Search } from "lucide-react";
 import Menu from "@/components/Menu/Menu";
 import { ServiceFormData } from "../myservices/new/types";
 import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -13,7 +13,7 @@ import { ServiceCard } from "@/components/ServiceCard/ServiceCard"; // Ajuste o 
 import { PaginationComponent } from "@/components/Pagination/Pagination"; // Componente de Paginação
 
 export default function Feed() {
-  const [serviceTitle, setServiceTitle] = useState("");
+  const [searchTitle, setSearchTitle] = useState(""); // Novo estado para a busca por título
   const [companySector, setCompanySector] = useState("");
   const [model, setModel] = useState("");
   const [city, setCity] = useState("");
@@ -55,16 +55,17 @@ export default function Feed() {
     fetchServices();
   }, []);
 
-  const handleFilter = () => {
-    console.log("Valores dos filtros:", { serviceTitle, companySector, model, city, state, tags });
+  const handleSearch = () => {
+    const filtered = allServices.filter((service) =>
+      service.serviceTitle.toLowerCase().includes(searchTitle.toLowerCase())
+    );
+    setServices(filtered);
+  };
 
-    const isFiltersEmpty =
-      !serviceTitle &&
-      !companySector &&
-      !model &&
-      !city &&
-      !state &&
-      !tags;
+  const handleFilter = () => {
+    console.log("Valores dos filtros:", { companySector, model, city, state, tags });
+
+    const isFiltersEmpty = !companySector && !model && !city && !state && !tags;
 
     if (isFiltersEmpty) {
       setServices(allServices);
@@ -73,10 +74,6 @@ export default function Feed() {
     }
 
     const filtered = allServices.filter((service) => {
-      const matchesServiceTitle = serviceTitle
-        ? service.serviceTitle.toLowerCase().includes(serviceTitle.toLowerCase())
-        : false;
-
       const matchesCompanySector = companySector
         ? service.companySector.toLowerCase().includes(companySector.toLowerCase())
         : false;
@@ -107,7 +104,6 @@ export default function Feed() {
         : false;
 
       return (
-        matchesServiceTitle ||
         matchesCompanySector ||
         matchesModel ||
         matchesCity ||
@@ -142,59 +138,71 @@ export default function Feed() {
             <div className="w-72 border-b-2 border-white"></div>
           </div>
 
-          {/* Botão de Filtrar Serviços */}
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button
-                className="mb-4 text-lg bg-cyan-500 text-white font-semibold hover:bg-cyan-700 transition duration-200 flex items-center ml-auto mr-5"
-                onClick={() => setIsDialogOpen(true)}
-              >
-                <Filter className="mr-2" size={20} /> {/* Adicione o ícone */}
-                Filtros
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogTitle>Filtrar Serviços</DialogTitle>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input
-                  placeholder="Título do Serviço"
-                  value={serviceTitle}
-                  onChange={(e) => setServiceTitle(e.target.value)}
-                />
-                <Input
-                  placeholder="Setor da Empresa"
-                  value={companySector}
-                  onChange={(e) => setCompanySector(e.target.value)}
-                />
-                <Input
-                  placeholder="Modelo (Presencial/Remoto)"
-                  value={model}
-                  onChange={(e) => setModel(e.target.value)}
-                />
-                <Input
-                  placeholder="Cidade"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                />
-                <Input
-                  placeholder="Estado"
-                  value={state}
-                  onChange={(e) => setState(e.target.value)}
-                />
-                <Input
-                  placeholder="Tags (separadas por vírgula)"
-                  value={tags}
-                  onChange={(e) => setTags(e.target.value)}
-                />
-              </div>
-              <Button
-                className="mt-4 bg-cyan-500 rounded-full font-semibold hover:bg-cyan-700 transition duration-200 text-lg"
-                onClick={handleFilter}
-              >
-                Filtrar
-              </Button>
-            </DialogContent>
-          </Dialog>
+          {/* Campo de Busca por Título e Botão de Filtrar Serviços */}
+          <div className="flex items-center mb-4 space-x-4 mr-5">
+            <div className="relative w-full ml-5">
+              <Input
+                placeholder="Busque pelo nome do serviço"
+                value={searchTitle}
+                onChange={(e) => setSearchTitle(e.target.value)}
+                className="text-black pl-2 pr-8" 
+              />
+              <Search
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                size={20}
+                onClick={handleSearch} // Usa a função handleSearch ao clicar no ícone
+                style={{ cursor: "pointer" }} // Muda o cursor ao passar sobre o ícone
+              />
+            </div>
+
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  className="text-lg bg-cyan-500 text-white font-semibold hover:bg-cyan-700 transition duration-200 flex items-center"
+                  onClick={() => setIsDialogOpen(true)}
+                >
+                  <Filter className="mr-2 justify-end" size={20} /> {/* Adicione o ícone */}
+                  Filtros
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogTitle>Filtrar Serviços</DialogTitle>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Input
+                    placeholder="Setor da Empresa"
+                    value={companySector}
+                    onChange={(e) => setCompanySector(e.target.value)}
+                  />
+                  <Input
+                    placeholder="Modelo (Presencial/Remoto)"
+                    value={model}
+                    onChange={(e) => setModel(e.target.value)}
+                  />
+                  <Input
+                    placeholder="Cidade"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                  />
+                  <Input
+                    placeholder="Estado"
+                    value={state}
+                    onChange={(e) => setState(e.target.value)}
+                  />
+                  <Input
+                    placeholder="Tags (separadas por vírgula)"
+                    value={tags}
+                    onChange={(e) => setTags(e.target.value)}
+                  />
+                </div>
+                <Button
+                  className="mt-4 bg-cyan-500 font-semibold hover:bg-cyan-700 transition duration-200 text-lg"
+                  onClick={handleFilter}
+                >
+                  Filtrar
+                </Button>
+              </DialogContent>
+            </Dialog>
+          </div>
 
           {/* Exibição dos Serviços */}
           <div className="mt-12 mb-4">
@@ -215,19 +223,19 @@ export default function Feed() {
                       imageSrc="/assets/Saly-10.png" // Ajuste conforme seus dados
                       companyName={"Empresa teste" || "Empresa teste"}
                       companySector={service.companySector || "Financeiro"}
-                      tags={Array.isArray(service.tags) ? service.tags : service.tags ? service.tags.split(",").map(tag => tag.trim()) : []}
+                      tags={Array.isArray(service.tags) ? service.tags : []}
                       serviceTitle={service.serviceTitle}
-                      city={service.city}
-                      state={service.state}
+                      city={service.city || "Cidade teste"}
+                      state={service.state || "SP"}
+                      description={service.description}
                       postedDaysAgo={postedDaysAgo}
-                      description={service.description || ""}
                       className="aspect-w-1 aspect-h-1"
                     />
                   );
                 })}
               </div>
             ) : (
-              <p className="text-white text-center">Nenhum serviço encontrado.</p>
+              <p className="text-white font-bold text-center text-2xl">Nenhum serviço encontrado.</p>
             )}
           </div>
 
