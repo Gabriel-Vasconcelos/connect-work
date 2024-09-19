@@ -158,7 +158,7 @@ export default function Feed() {
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button
-                  className="text-lg bg-cyan-500 text-white font-semibold hover:bg-cyan-700 transition duration-200 flex items-center"
+                  className="text-md md:text-lg bg-cyan-500 text-white font-semibold hover:bg-cyan-700 transition duration-200 flex items-center"
                   onClick={() => setIsDialogOpen(true)}
                 >
                   <Filter className="mr-2 justify-end" size={20} /> {/* Adicione o ícone */}
