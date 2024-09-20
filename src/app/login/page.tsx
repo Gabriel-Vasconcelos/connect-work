@@ -7,7 +7,7 @@ const LoginPage = () => {
       <section className="">
         <LoginForm />
       </section>
-      <section>
+      <section className="max-lg:hidden">
         <Image src="/assets/woman-relax.png" alt="Imagem" width={600} height={698} className="w-full h-full object-cover" />
       </section>
     </main>
