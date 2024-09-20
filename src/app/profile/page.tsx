@@ -1,135 +1,230 @@
 "use client";
 
-import  Menu  from "@/components/Menu/Menu";
+import Menu from "@/components/Menu/Menu";
 import Image from "next/image";
-import { UserRound, Upload, Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { UserRound, Upload, CameraIcon } from "lucide-react";
+import { useState, useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form";
-import { RegisterFormData } from "./types";
+import { db, auth, storage } from "@/services/firebase.config";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
+import { RegisterFormData } from "@/components/RegisterForm/types";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
-export default function New() {
+export default function EditProfile() {
+    const { handleSubmit, register, setValue, formState: { errors } } = useForm<RegisterFormData>();
+    const [userId, setUserId] = useState<string | null>(null);
+    const [states, setStates] = useState<{ id: number, nome: string, sigla: string }[]>([]);
+    const [cities, setCities] = useState<{ id: number, nome: string }[]>([]);
 
-    const { handleSubmit, register, formState: { errors } } = useForm<RegisterFormData>();
+    const [selectedState, setSelectedState] = useState<string | null>(null);
+    const [selectedCity, setSelectedCity] = useState<string | null>(null);
+    const [profileImage, setProfileImage] = useState<File | null>(null);
 
-    const [showPassword, setShowPassword] = useState(false);
+    // Carregar estados ao montar o componente
+    useEffect(() => {
+        const fetchStates = async () => {
+            const res = await fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados");
+            const data = await res.json();
+            setStates(data);
+        };
+        fetchStates();
+    }, []);
 
-    const onSubmit: SubmitHandler<RegisterFormData> = (data: RegisterFormData) => {
-        // Handle form submission
-    }
+    // Carregar dados do usuário ao montar o componente
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser: any) => {
+            if (currentUser) {
+                setUserId(currentUser.uid);
+                const userDoc = doc(db, "companies", currentUser.uid);
+                const userSnapshot = await getDoc(userDoc);
 
-    const onError: SubmitErrorHandler<RegisterFormData> = (errors) => {
-        // Handle errors
-    }
+                if (userSnapshot.exists()) {
+                    const userData = userSnapshot.data();
+                    setValue("name", userData.name);
+                    setValue("phone", userData.phone);
+                    setValue("state", userData.state);
+                    setValue("city", userData.city);
+                    setValue("website", userData.website || "");
+                    setValue("linkedin", userData.linkedin || "");
+                    setValue("description", userData.description || "");
+                    setValue("email", currentUser.email);
 
-    const togglePasswordVisibility = () => {
-        setShowPassword((prevState) => !prevState);
-    }
+                    setProfileImage(userData.profileImageUrl);
 
+                    setSelectedState(userData.state); // Definindo o estado selecionado
+                    setSelectedCity(userData.city); // Definindo o estado selecionado
+                }
+            } else {
+                setUserId(null);
+            }
+        });
+
+        return () => unsubscribe(); // Limpar o listener
+    }, [setValue]);
+
+    const fetchCities = async (stateId: string) => {
+        const res = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${stateId}/municipios`);
+        const data = await res.json();
+        setCities(data);
+    };
+
+    useEffect(() => {
+        if (selectedState) {
+            fetchCities(selectedState);
+        }
+    }, [selectedState]);
+
+
+    const handleProfileImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0] || null;
+        setProfileImage(file);
+    };
+
+    const onSubmit: SubmitHandler<RegisterFormData> = async (data: RegisterFormData) => {
+        if (!userId) return;
+
+        try {
+            let profileImageUrl = "";
+            if (profileImage) {
+                const imageRef = ref(storage, `profiles/${userId}/${profileImage.name}`);
+                await uploadBytes(imageRef, profileImage);
+                profileImageUrl = await getDownloadURL(imageRef);
+            }
+
+            const userRef = doc(db, "companies", userId);
+            await updateDoc(userRef, {
+                name: data.name,
+                phone: data.phone,
+                state: data.state,
+                city: data.city,
+                website: data.website || "",
+                linkedin: data.linkedin || "",
+                description: data.description,
+                profileImageUrl
+            });
+
+            // Aqui você pode adicionar a lógica para fazer o upload da nova imagem de perfil
+
+            window.location.reload();
+            console.log("Perfil atualizado com sucesso!");
+        } catch (error) {
+            console.error("Erro ao atualizar o perfil:", error);
+        }
+    };
 
     return (
         <>
             <Menu />
-
             <div className="pt-28 md:pt-6 md:ml-64 md:mt-0 p-6 bg-[#082F49] min-h-screen overflow-x-hidden">
                 <div className="max-w-4xl mx-auto">
-                    {/* Título com Ícone e Linha Centralizado */}
                     <div className="flex flex-col items-center mb-12 md:mt-8">
                         <div className="flex items-center mb-2">
-                            <UserRound className="text-white mr-2" size={26} /> {/* Ícone ao lado do título */}
-                            <h1 className="text-3xl font-bold text-white">
-                                Editar Perfil
-                            </h1>
+                            <UserRound className="text-white mr-2" size={26} />
+                            <h1 className="text-3xl font-bold text-white">Editar Perfil</h1>
                         </div>
-                        {/* Linha abaixo do título */}
                         <div className="w-1/2 md:w-1/4 border-b-2 border-white"></div>
                     </div>
 
-                    <div className="relative mt-10 w-44 h-44 mx-auto">
-                        <Image src="/assets/Saly-10.png" alt="Imagem" width={180} height={180} className="block mx-auto shadow-[2px_3px_6px_#121212] rounded-full object-cover" />
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <Upload className="text-white opacity-75 hover:opacity-100 cursor-pointer" size={40} />
+                    <label htmlFor="profileImage" className="mx-auto group cursor-pointer relative flex items-center justify-center w-36 h-36 rounded-full border-2 border-gray-300 bg-gray-100 text-gray-500">
+                        <Input
+                            id="profileImage"
+                            type="file"
+                            accept="image/*"
+                            onChange={handleProfileImageChange}
+                            className="absolute inset-0 opacity-0 cursor-pointer"
+                        />
+                        {profileImage && (
+                            <img
+                                src={typeof profileImage === "object" ? URL.createObjectURL(profileImage) : profileImage}
+                                alt="Profile"
+                                className="w-full h-full object-cover rounded-full border-2 border-gray-300 transition-all duration-300 group-hover:opacity-80"
+                            />
+                        )}
+                        <div className={`${profileImage ? 'hidden' : 'flex'} absolute w-full h-full items-center justify-center transition-all duration-300 group-hover:flex`}>
+                            <CameraIcon />
+                            {typeof profileImage}
                         </div>
-                    </div>
+                    </label>
 
-                    {/* Inputs */}
-                    <form onSubmit={handleSubmit(onSubmit, onError)} className="flex flex-col md:grid md:grid-cols-2 gap-5 gap-x-12 mb-4 mt-14">
-
+                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col md:grid md:grid-cols-2 gap-5 gap-x-12 mb-4 mt-14">
                         <div>
-                            <Label htmlFor="companyName" className="block text-sm font-medium text-white">Nome da Empresa</Label>
-                            <Input id="companyName" {...register("companyName")} type="companyName" placeholder="Digite o nome da empresa" className="mt-1 p-2 rounded w-full" />
-                            <p className="error--message mt-1">
-                                {errors.companyName && errors.companyName.message}
-                            </p>
+                            <Label htmlFor="name" className="block text-sm font-medium text-white">Nome da Empresa</Label>
+                            <Input id="name" {...register("name", { required: "Nome da empresa é obrigatório" })} placeholder="Digite o nome da empresa" className="mt-1 p-2 rounded w-full" />
+                            <p className="error--message mt-1">{errors.name && errors.name.message}</p>
                         </div>
                         <div>
-                            <Label htmlFor="contact" className="block text-sm font-medium text-white">Contato</Label>
-                            <Input id="contact" {...register("contact")} type="contact" placeholder="Forma de contato" className="mt-1 p-2 rounded w-full" />
-                            <p className="error--message mt-1">
-                                {errors.contact && errors.contact.message}
-                            </p>
+                            <Label htmlFor="email" className="block text-sm font-medium text-white">Email*</Label>
+                            <Input id="email" {...register("email")} type="email" placeholder="Digite seu E-mail" disabled className="mt-1 p-2 rounded w-full" />
                         </div>
                         <div>
-                            <Label htmlFor="city" className="block text-sm font-medium text-white">Cidade</Label>
-                            <Input id="city" {...register("city")} type="city" placeholder="Cidade da sua empresa" className="mt-1 p-2 rounded w-full" />
-                            <p className="error--message mt-1">
-                                {errors.city && errors.city.message}
-                            </p>
+                            <Label htmlFor="phone" className="block text-sm font-medium text-white">Telefone*</Label>
+                            <Input id="phone" {...register("phone", { required: "Telefone é obrigatório" })} placeholder="Digite seu Telefone" className="mt-1 p-2 rounded w-full" />
+                            <p className="error--message mt-1">{errors.phone && errors.phone.message}</p>
                         </div>
                         <div>
-                            <Label htmlFor="state" className="block text-sm font-medium text-white">Estado</Label>
-                            <Input id="state" {...register("state")} type="state" placeholder="Estado da sua empresa" className="mt-1 p-2 rounded w-full" />
-                            <p className="error--message mt-1">
-                                {errors.state && errors.state.message}
-                            </p>
+                            <Label htmlFor="state" className="block text-sm font-medium text-white">Estado*</Label>
+                            <Select
+                                {...register("state", { required: "Preencha o campo Estado" })}
+                                onValueChange={(value) => {
+                                    setValue("state", value);
+                                    setSelectedState(value);
+                                }}
+                                value={selectedState || ""}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Selecione o Estado" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {states.map(state => (
+                                        <SelectItem key={state.sigla} value={state.sigla}>{state.nome}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <p className="error--message mt-1">{errors.state && errors.state.message}</p>
                         </div>
                         <div>
-                            <Label htmlFor="email" className="block text-sm font-medium text-white">Email</Label>
-                            <Input id="email" {...register("email")} type="email" placeholder="Digite seu novo email" className="mt-1 p-2 rounded w-full" />
-                            <p className="error--message mt-1">
-                                {errors.email && errors.email.message}
-                            </p>
+                            <Label htmlFor="city" className="block text-sm font-medium text-white">Cidade*</Label>
+                            <Select
+                                disabled={!selectedState}
+                                {...register("city", { required: "Preencha o campo Cidade" })}
+                                onValueChange={(value) => {
+                                    if (selectedState) {
+                                        setValue("city", value)
+                                        setSelectedCity(value);
+                                    }
+                                }}
+                                value={selectedCity || ""}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Selecione a Cidade" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {cities.map(city => (
+                                        <SelectItem key={city.id} value={city.nome}>{city.nome}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <p className="error--message mt-1">{errors.city && errors.city.message}</p>
                         </div>
                         <div>
-                            <Label htmlFor="password" className="block text-sm font-medium text-white">Senha</Label>
-                            <div className="relative">
-                                <Input id="password" {...register("password")} type={showPassword ? "text" : "password"} placeholder="Digite sua nova senha" className="mt-1 p-2 rounded w-full" />
-
-                                <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-                                    {showPassword ? (
-                                        <EyeOff className="text-gray-400 cursor-pointer" size={20} onClick={togglePasswordVisibility} />
-                                    ) : (
-                                        <Eye className="text-gray-400 cursor-pointer" size={20} onClick={togglePasswordVisibility} />
-                                    )}
-                                </div>
-
-                            </div>
-                            <p className="error--message mt-1">
-                                {errors.password && errors.password.message}
-                            </p>
+                            <Label htmlFor="website" className="block text-sm font-medium text-white">Site da Empresa</Label>
+                            <Input id="website" {...register("website")} type="url" placeholder="https://www.empresa.com.br" className="mt-1 p-2 rounded w-full" />
                         </div>
-                        <div className="col-span-2">
-                            <Label htmlFor="services" className="block text-sm font-medium text-white">Serviços</Label>
-                            <Input id="services" {...register("services")} type="services" placeholder="Escreva os serviços que sua empresa realiza" className="mt-1 p-2 rounded w-full" />
-                            <p className="error--message mt-1">
-                                {errors.password && errors.password.message}
-                            </p>
+                        <div>
+                            <Label htmlFor="linkedin" className="block text-sm font-medium text-white">LinkedIn</Label>
+                            <Input id="linkedin" {...register("linkedin")} type="url" placeholder="https://www.linkedin.com/in/empresa/" className="mt-1 p-2 rounded w-full" />
                         </div>
-                        <div className="col-span-2">
-                            <Label htmlFor="companyDescription" className="block text-sm font-medium text-white">Descrição da empresa</Label>
-                            <textarea id="description" {...register("companyDescription")} placeholder="Fale sobre sua empresa (missão, visão, valores...)" className="mt-1 p-2 border rounded w-full placeholder-gray-500 placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" rows={4}></textarea>
-                            <p className="error--message mt-1">
-                                {errors.companyDescription && errors.companyDescription.message}
-                            </p>
+                        <div>
+                            <Label htmlFor="description" className="block text-sm font-medium text-white">Descrição da Empresa*</Label>
+                            <Input id="description" {...register("description", { required: "Descrição é obrigatória" })} placeholder="Digite uma breve descrição" className="mt-1 p-2 rounded w-full" />
+                            <p className="error--message mt-1">{errors.description && errors.description.message}</p>
                         </div>
-
-                        <div className="col-span-2 flex justify-center mt-8">
-                            <Button type="submit" className="bg-cyan-500 text-white w-full max-w-md py-3 text-lg md:text-2xl font-semibold hover:bg-cyan-700 transition duration-200">
-                                Editar perfil
-                            </Button>
-                        </div>
+                        <Button size="lg" className="col-span-2 mt-5 font-semibold bg-cyan-500 hover:bg-cyan-700 text-xl w-full max-w-96 mx-auto">Atualizar Perfil</Button>
                     </form>
                 </div>
             </div>

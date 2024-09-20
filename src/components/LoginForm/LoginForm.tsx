@@ -11,13 +11,14 @@ import { FaApple, FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
 import { useSignInWithEmailAndPassword, useSignInWithGoogle } from "react-firebase-hooks/auth";
-import { auth } from "@/services/firebase.config";
+import { auth, db } from "@/services/firebase.config";
 
 import Cookies from 'js-cookie';
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export const LoginForm = () => {
   const { handleSubmit, register, formState: { errors } } = useForm<LoginFormData>();
@@ -34,8 +35,29 @@ export const LoginForm = () => {
       const result = await signInWithGoogle();
       if (result?.user) {
         const idToken = await result.user.getIdToken();
-        Cookies.set("auth-token", idToken, { expires: 7 });
-        router.push("/feed");
+
+        // Verificar se o usuário já tem os dados completos no Firestore
+        const userDocRef = doc(db, "companies", result.user.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          console.log("test ", userData, userData.isProfileComplete)
+          if (userData.isProfileComplete || userData.isProfileComplete == undefined) {
+            // Usuário já tem perfil completo, redirecionar para o feed
+            Cookies.set("auth-token", idToken, { expires: 7 });
+            router.push("/feed");
+          } else {
+            console.log("test 222")
+            // Usuário precisa completar o cadastro
+            router.push("/complete-profile"); // Crie uma rota para completar o cadastro
+          }
+        } else {
+          // Se o documento do usuário não existe, redirecionar para completar o perfil
+          await setDoc(userDocRef, { email: result.user.email, isProfileComplete: false });
+          router.push("/complete-profile");
+        }
+
         toast({
           title: "Login bem-sucedido com o Google!",
         });
@@ -48,7 +70,7 @@ export const LoginForm = () => {
         description: "Tente novamente mais tarde.",
       });
     }
-  }
+  };
 
   // Login com Email e Senha
   const onSubmit: SubmitHandler<LoginFormData> = async (data: LoginFormData) => {
@@ -127,7 +149,7 @@ export const LoginForm = () => {
           <hr />
         </div>
         <div className="grid grid-flow-col items-center flex-wrap gap-x-4 mt-5">
-          <Button size="lg" variant="secondary" className="py-8 group"><FaFacebook color="blue" className="lg:group-hover:size-9" size="28" /></Button>
+          {/* <Button size="lg" variant="secondary" className="py-8 group"><FaFacebook color="blue" className="lg:group-hover:size-9" size="28" /></Button> */}
           <Button
             type="button"
             size="lg"
@@ -137,7 +159,7 @@ export const LoginForm = () => {
           >
             <FcGoogle size="28" className="lg:group-hover:size-9" />
           </Button>
-          <Button size="lg" variant="secondary" className="py-8 group"><FaApple size="28" className="lg:group-hover:size-9" /></Button>
+          {/* <Button size="lg" variant="secondary" className="py-8 group"><FaApple size="28" className="lg:group-hover:size-9" /></Button> */}
         </div>
       </div>
     </form>
