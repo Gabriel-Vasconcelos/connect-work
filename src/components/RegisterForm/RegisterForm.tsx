@@ -19,6 +19,7 @@ import { RegisterFormData } from "./types";
 import { Textarea } from "../ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { CameraIcon, Eye, EyeOff } from "lucide-react";
+import Image from "next/image";
 
 export const RegisterForm = () => {
   const { handleSubmit, register, setValue, watch, formState: { errors }, clearErrors } = useForm<RegisterFormData>();
@@ -191,7 +192,7 @@ export const RegisterForm = () => {
               className="absolute inset-0 opacity-0 cursor-pointer"
             />
             {profileImage && (
-              <img
+              <Image
                 src={URL.createObjectURL(profileImage)}
                 alt="Profile"
                 className="w-full h-full object-cover rounded-full border-2 border-gray-300 transition-all duration-300 group-hover:opacity-80"
