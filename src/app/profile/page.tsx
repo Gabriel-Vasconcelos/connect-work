@@ -149,7 +149,6 @@ export default function EditProfile() {
                         )}
                         <div className={`${profileImage ? 'hidden' : 'flex'} absolute w-full h-full items-center justify-center transition-all duration-300 group-hover:flex`}>
                             <CameraIcon />
-                            {typeof profileImage}
                         </div>
                     </label>
 
