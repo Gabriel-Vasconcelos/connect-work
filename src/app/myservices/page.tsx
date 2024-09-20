@@ -11,12 +11,15 @@ import { Button } from "@/components/ui/button";
 import { ServiceFormData } from "../myservices/new/types";
 import { ServiceCardUser } from "@/components/ServiceCardUser/ServiceCardUser";
 import { PaginationComponent } from "@/components/Pagination/Pagination";
+import { useToast } from "@/hooks/use-toast"
 
 export default function MyServices() {
     const [services, setServices] = useState<(ServiceFormData & { id: string })[]>([]);
     const [loading, setLoading] = useState(true);
+    const { toast } = useToast();
     const [currentPage, setCurrentPage] = useState(1);
     const servicesPerPage = 8;
+    
 
     useEffect(() => {
         const fetchServices = async () => {
@@ -48,13 +51,19 @@ export default function MyServices() {
 
                         setServices(userServices);
                     } else {
-                        alert("Acesso negado.");
+                        toast({
+                            variant: "destructive",
+                            title: "Acesso negado!",
+                        });
                     }
                     setLoading(false);
                 });
             } catch (error) {
                 console.error("Erro ao buscar serviços:", error);
-                alert("Erro ao buscar serviços.");
+                toast({
+                    variant: "destructive",
+                    title: "Erro ao buscar serviços",
+                });
                 setLoading(false);
             }
         };
