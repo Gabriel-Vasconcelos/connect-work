@@ -225,7 +225,7 @@ export default function EditProfile() {
                             <Input id="description" {...register("description", { required: "Descrição é obrigatória" })} placeholder="Digite uma breve descrição" className="mt-1 p-2 rounded w-full" />
                             <p className="error--message mt-1">{errors.description && errors.description.message}</p>
                         </div>
-                        <Button size="lg" className="col-span-2 mt-5 font-semibold bg-cyan-500 hover:bg-cyan-700 text-xl w-full max-w-96 mx-auto">Atualizar Perfil</Button>
+                        <Button size="lg" className="col-span-2 mt-5 font-bold bg-cyan-500 hover:bg-cyan-700 text-lg md:text-xl w-full max-w-96 mx-auto">Atualizar Perfil</Button>
                     </form>
                 </div>
             </div>
