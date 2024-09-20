@@ -1,0 +1,1 @@
+export { FeaturedText } from "./FeaturedText"

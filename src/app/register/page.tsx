@@ -17,6 +17,7 @@ const Register = () => {
   const [signInWithGoogle] = useSignInWithGoogle(auth);
   const { toast } = useToast();
   const router = useRouter();
+  
   const handleGoogleSignIn = async () => {
 
     try {

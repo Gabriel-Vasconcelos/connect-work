@@ -12,9 +12,13 @@ export const Hero = () => {
           <span className="text-sky-950">Cresça.</span>
         </h1>
         <p className="mt-10 text-lg max-w-[450px] lg:text-xl">
-          Na <span className="text-sky-600">Connect Work</span>,
-          nossa missão é conectar empresas e simplificar a busca por serviços, criando um ecossistema eficiente e confiável que impulsiona parcerias valiosas e duradouras.</p>
-        <Link className="w-full" href="/register" title="Cadastre-se"><Button size="lg" className="mt-6 w-full max-w-72 text-2xl py-7 bg-cyan-500 hover:bg-cyan-700 transition duration-200">Cadastrar</Button></Link>
+          Conecte-se ao futuro dos negócios com a <span className="text-sky-600">Connect Work</span>. Encontre parcerias valiosas e serviços com facilidade.
+        </p>
+        <Link className="w-full" href="/register" title="Cadastre-se">
+          <Button size="lg" className="mt-6 w-full max-w-72 text-2xl py-7 bg-cyan-500 hover:bg-cyan-700 transition duration-200">
+            Cadastre-se agora!
+          </Button>
+        </Link>
       </div>
 
       <div>
