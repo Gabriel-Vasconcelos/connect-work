@@ -142,6 +142,8 @@ export default function EditProfile() {
                             <Image
                                 src={typeof profileImage === "object" ? URL.createObjectURL(profileImage) : profileImage}
                                 alt="Profile"
+                                layout="fill"
+                                objectFit="cover" 
                                 className="w-full h-full object-cover rounded-full border-2 border-gray-300 transition-all duration-300 group-hover:opacity-80"
                             />
                         )}
