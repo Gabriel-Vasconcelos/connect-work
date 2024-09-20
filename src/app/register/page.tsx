@@ -13,52 +13,51 @@ import { FcGoogle } from "react-icons/fc";
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 
-
-const handleGoogleSignIn = async () => {
+const Register = () => {
   const [signInWithGoogle] = useSignInWithGoogle(auth);
   const { toast } = useToast();
   const router = useRouter();
+  const handleGoogleSignIn = async () => {
 
-  try {
-    const result = await signInWithGoogle();
-    if (result?.user) {
-      const idToken = await result.user.getIdToken();
-      Cookies.set("auth-token", idToken, { expires: 7 });
+    try {
+      const result = await signInWithGoogle();
+      if (result?.user) {
+        const idToken = await result.user.getIdToken();
+        Cookies.set("auth-token", idToken, { expires: 7 });
 
-      // Verificar se o usuário já tem os dados completos no Firestore
-      const userDocRef = doc(db, "companies", result.user.uid);
-      const userDoc = await getDoc(userDocRef);
+        // Verificar se o usuário já tem os dados completos no Firestore
+        const userDocRef = doc(db, "companies", result.user.uid);
+        const userDoc = await getDoc(userDocRef);
 
-      if (userDoc.exists()) {
-        const userData = userDoc.data();
-        if (userData.isProfileComplete) {
-          // Usuário já tem perfil completo, redirecionar para o feed
-          router.push("/feed");
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          if (userData.isProfileComplete) {
+            // Usuário já tem perfil completo, redirecionar para o feed
+            router.push("/feed");
+          } else {
+            // Usuário precisa completar o cadastro
+            router.push("/complete-profile");
+          }
         } else {
-          // Usuário precisa completar o cadastro
+          // Se o documento do usuário não existe, redirecionar para completar o perfil
+          await setDoc(userDocRef, { email: result.user.email, isProfileComplete: false });
           router.push("/complete-profile");
         }
-      } else {
-        // Se o documento do usuário não existe, redirecionar para completar o perfil
-        await setDoc(userDocRef, { email: result.user.email, isProfileComplete: false });
-        router.push("/complete-profile");
-      }
 
+        toast({
+          title: "Cadastro Inicial bem-sucedido com o Google!",
+        });
+      }
+    } catch (error) {
+      console.error("Google sign-in error:", error);
       toast({
-        title: "Cadastro Inicial bem-sucedido com o Google!",
+        variant: "destructive",
+        title: "Erro ao fazer Cadastro Inicial com Google",
+        description: "Tente novamente mais tarde.",
       });
     }
-  } catch (error) {
-    console.error("Google sign-in error:", error);
-    toast({
-      variant: "destructive",
-      title: "Erro ao fazer Cadastro Inicial com Google",
-      description: "Tente novamente mais tarde.",
-    });
-  }
-};
+  };
 
-const Register = () => {
   return (
     <div className="flex max-h-[90vh] lg:overflow-hidden">
       <div className="max-lg:hidden overflow-hidden relative w-1/5 h-[90vh] flex flex-col items-center justify-center bg-sky-950">

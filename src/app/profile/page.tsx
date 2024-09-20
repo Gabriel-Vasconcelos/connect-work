@@ -139,7 +139,7 @@ export default function EditProfile() {
                             className="absolute inset-0 opacity-0 cursor-pointer"
                         />
                         {profileImage && (
-                            <img
+                            <Image
                                 src={typeof profileImage === "object" ? URL.createObjectURL(profileImage) : profileImage}
                                 alt="Profile"
                                 className="w-full h-full object-cover rounded-full border-2 border-gray-300 transition-all duration-300 group-hover:opacity-80"

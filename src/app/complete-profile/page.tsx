@@ -20,6 +20,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import Image from 'next/image';
 
 const CompleteProfile = () => {
   const { handleSubmit, register, setValue, watch, formState: { errors }, clearErrors } = useForm<RegisterFormData>();
@@ -181,7 +182,7 @@ const CompleteProfile = () => {
               className="absolute inset-0 opacity-0 cursor-pointer"
             />
             {profileImage && (
-              <img
+              <Image
                 src={URL.createObjectURL(profileImage)}
                 alt="Profile"
                 className="w-full h-full object-cover rounded-full border-2 border-gray-300 transition-all duration-300 group-hover:opacity-80"
