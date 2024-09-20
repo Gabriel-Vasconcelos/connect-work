@@ -20,7 +20,7 @@ export const UnauthenticatedHeader = () => {
   if (!isUnauthenticatedPath && pathname !== "/") return null;
 
   return (
-    <header className="w-full bg-sky-600 py-10 text-white">
+    <header className="w-full bg-sky-600 py-7 text-white">
       <div className="site--container flex justify-between items-center w-full">
         <Link title="Homepage" href="/" className="text-5xl font-bold lg:text-5xl">Connect Work</Link>
         <nav className="max-lg:hidden flex text-lg items-center gap-x-4">
