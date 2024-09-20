@@ -120,7 +120,7 @@ export default function EditProfile() {
     return (
         <>
             <Menu />
-            <div className="pt-28 md:pt-6 md:ml-64 md:mt-0 p-6 bg-[#082F49] min-h-screen overflow-x-hidden">
+            <div className="pt-28 md:pt-6 md:ml-56 md:mt-0 p-6 bg-[#082F49] min-h-screen overflow-x-hidden">
                 <div className="max-w-4xl mx-auto">
                     <div className="flex flex-col items-center mb-12 md:mt-8">
                         <div className="flex items-center mb-2">
