@@ -9,8 +9,8 @@ export const FeaturedText = ({ title, description, imageSrc }: FeaturedTextData)
 
       </div>
       <div className="max-w-6xl absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-gray-50">
-        <h2 className="text-6xl font-bold mb-4">{title}</h2>
-        <p className="text-2xl">{description}</p>
+        <h2 className="text-5xl font-bold mb-4 lg:text-6xl">{title}</h2>
+        <p className="text-xl font-medium lg:text-2xl">{description}</p>
       </div>
     </section>
   );
