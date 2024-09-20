@@ -5,7 +5,9 @@ import { collection, getDocs, query, where, Timestamp } from "firebase/firestore
 import { getAuth } from "firebase/auth";
 import { db } from "@/services/firebase.config";
 import { NotebookPen } from "lucide-react";
+import Link from "next/link";  // Adicione o import para Link
 import Menu from "@/components/Menu/Menu";
+import { Button } from "@/components/ui/button";
 import { ServiceFormData } from "../myservices/new/types";
 import { ServiceCardUser } from "@/components/ServiceCardUser/ServiceCardUser";
 import { PaginationComponent } from "@/components/Pagination/Pagination";
@@ -31,7 +33,6 @@ export default function MyServices() {
                         querySnapshot.forEach((doc) => {
                             const data = doc.data() as ServiceFormData;
 
-                            // Garantir que createdAt é uma instância de Timestamp
                             if (data.createdAt instanceof Timestamp) {
                                 data.createdAt = data.createdAt.toDate();
                             }
@@ -43,7 +44,6 @@ export default function MyServices() {
                             });
                         });
 
-                        // Ordenar os serviços pela data de criação mais recente
                         userServices.sort((a, b) => (b.createdAt as Date).getTime() - (a.createdAt as Date).getTime());
 
                         setServices(userServices);
@@ -86,7 +86,14 @@ export default function MyServices() {
                             <p className="text-white font-bold text-center text-2xl">Buscando os serviços, aguarde...</p>
                         ) : (
                             services.length === 0 ? (
-                                <p className="text-white font-bold text-center text-2xl">Nenhum serviço encontrado.</p>
+                                <div className="text-center">
+                                    <p className="text-white font-bold text-2xl">Nenhum serviço encontrado, crie um novo serviço abaixo.</p>
+                                    <Link href="/myservices/new">
+                                        <Button className="mt-6 text-xl px-6 py-3 bg-cyan-500 hover:bg-cyan-700 text-white font-bold">
+                                            Criar Serviço
+                                        </Button>
+                                    </Link>
+                                </div>
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-16 mx-5">
                                     {currentServices.map((service) => {
@@ -101,7 +108,7 @@ export default function MyServices() {
                                                 key={service.id}
                                                 serviceId={service.id}
                                                 imageSrc="/assets/Saly-10.png"
-                                                companyName="Empresa Teste" // Ajuste conforme necessário
+                                                companyName="Empresa Teste"
                                                 companySector={service.companySector}
                                                 tags={Array.isArray(service.tags) ? service.tags : service.tags ? service.tags.split(",").map(tag => tag.trim()) : []}
                                                 serviceTitle={service.serviceTitle}
