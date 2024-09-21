@@ -19,7 +19,7 @@ export default function MyServices() {
     const { toast } = useToast();
     const [currentPage, setCurrentPage] = useState(1);
     const servicesPerPage = 8;
-    
+
 
     useEffect(() => {
         const fetchServices = async () => {
@@ -89,6 +89,16 @@ export default function MyServices() {
                         </div>
                         <div className="w-64 border-b-2 border-white"></div>
                     </div>
+
+                    {services.length > 0 && (
+                        <div className="flex justify-end mr-5">
+                            <Link href="/myservices/new">
+                                <Button className="text-lg px-4 py-2 bg-cyan-500 hover:bg-cyan-700 text-white font-bold">
+                                    Criar Serviço
+                                </Button>
+                            </Link>
+                        </div>
+                    )}
 
                     <div className="mt-12 mb-4">
                         {loading ? (
