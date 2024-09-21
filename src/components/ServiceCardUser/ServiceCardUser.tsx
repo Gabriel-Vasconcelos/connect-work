@@ -1,8 +1,15 @@
+"use client"
+
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ServiceCardUserProps } from "./types";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { doc, deleteDoc } from "firebase/firestore";
+import { db } from "@/services/firebase.config";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export const ServiceCardUser: React.FC<ServiceCardUserProps> = ({
     imageSrc,
@@ -16,14 +23,29 @@ export const ServiceCardUser: React.FC<ServiceCardUserProps> = ({
     serviceId, // Adiciona o ID do serviço
     className
 }) => {
+
+    const router = useRouter();
+    const [openDialog, setOpenDialog] = useState(false); // Controla a visibilidade do diálogo
+    const [isDeleting, setIsDeleting] = useState(false); // Estado para indicar que a exclusão está em andamento
+
     const handleEdit = () => {
-        // Navegar para a página de edição ou abrir um modal
-        window.location.href = `/myservices/edit/${serviceId}`;
+
+        router.push(`/myservices/edit/${serviceId}`);
     };
 
-    const handleDelete = () => {
-        // Lógica para excluir o serviço
-        console.log("Excluir serviço com ID:", serviceId);
+    const handleDelete = async () => {
+        try {
+            setIsDeleting(true); // Indica que a exclusão está em andamento
+            // Exclui o documento do Firestore com base no ID do serviço
+            await deleteDoc(doc(db, "services", serviceId));
+            console.log("Serviço excluído com sucesso:", serviceId);
+            setOpenDialog(false); // Fecha o diálogo após a exclusão
+            router.refresh(); // Atualiza a página ou redireciona conforme necessário
+        } catch (error) {
+            console.error("Erro ao excluir o serviço:", error);
+        } finally {
+            setIsDeleting(false); // Restaura o estado após a tentativa de exclusão
+        }
     };
 
     return (
@@ -70,9 +92,28 @@ export const ServiceCardUser: React.FC<ServiceCardUserProps> = ({
                 <Button onClick={handleEdit} className="bg-cyan-500 text-white font-semibold md:text-md hover:bg-cyan-700 w-1/2">
                     Editar
                 </Button>
-                <button onClick={handleDelete} className="text-red-500 font-semibold md:text-md hover:text-red-700 w-1/2 hover:border-red-500">
-                    Excluir
-                </button>
+                {/* Botão para abrir o diálogo de exclusão */}
+                <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+                    <DialogTrigger asChild>
+                        <button className="text-red-500 font-semibold md:text-md hover:text-red-700 w-1/2 hover:border-red-500">
+                            Excluir
+                        </button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Confirmar exclusão</DialogTitle>
+                        </DialogHeader>
+                        <p>Tem certeza de que deseja excluir este serviço?</p>
+                        <DialogFooter>
+                            <Button variant="ghost" onClick={() => setOpenDialog(false)}>
+                                Cancelar
+                            </Button>
+                            <Button variant="destructive" onClick={handleDelete} disabled={isDeleting}>
+                                {isDeleting ? "Excluindo..." : "Excluir"}
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
             </CardFooter>
         </Card>
     );
