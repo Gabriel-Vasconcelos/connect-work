@@ -10,4 +10,5 @@ export type ServiceCardUserProps = {
     description: string;
     className?: string;
     serviceId: string;
+    fetchServices: () => Promise<void>;
   };

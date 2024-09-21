@@ -21,7 +21,8 @@ export const ServiceCardUser: React.FC<ServiceCardUserProps> = ({
     state,
     description,
     serviceId, // Adiciona o ID do serviço
-    className
+    className,
+    fetchServices
 }) => {
 
     const router = useRouter();
@@ -40,7 +41,7 @@ export const ServiceCardUser: React.FC<ServiceCardUserProps> = ({
             await deleteDoc(doc(db, "services", serviceId));
             console.log("Serviço excluído com sucesso:", serviceId);
             setOpenDialog(false); // Fecha o diálogo após a exclusão
-            router.refresh(); // Atualiza a página ou redireciona conforme necessário
+            await fetchServices();
         } catch (error) {
             console.error("Erro ao excluir o serviço:", error);
         } finally {

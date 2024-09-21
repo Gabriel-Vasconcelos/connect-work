@@ -21,55 +21,57 @@ export default function MyServices() {
     const servicesPerPage = 8;
 
 
-    useEffect(() => {
-        const fetchServices = async () => {
-            try {
-                const auth = getAuth();
-                auth.onAuthStateChanged(async (user) => {
-                    if (user) {
-                        const uid = user.uid;
-                        const servicesRef = collection(db, "services");
-                        const q = query(servicesRef, where("userId", "==", uid));
-                        const querySnapshot = await getDocs(q);
 
-                        const userServices: (ServiceFormData & { id: string })[] = [];
-                        querySnapshot.forEach((doc) => {
-                            const data = doc.data() as ServiceFormData;
+    const fetchServices = async () => {
+        try {
+            const auth = getAuth();
+            auth.onAuthStateChanged(async (user) => {
+                if (user) {
+                    const uid = user.uid;
+                    const servicesRef = collection(db, "services");
+                    const q = query(servicesRef, where("userId", "==", uid));
+                    const querySnapshot = await getDocs(q);
 
-                            if (data.createdAt instanceof Timestamp) {
-                                data.createdAt = data.createdAt.toDate();
-                            }
+                    const userServices: (ServiceFormData & { id: string })[] = [];
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data() as ServiceFormData;
 
-                            userServices.push({
-                                ...data,
-                                id: doc.id,
-                                tags: data.tags,
-                            });
+                        if (data.createdAt instanceof Timestamp) {
+                            data.createdAt = data.createdAt.toDate();
+                        }
+
+                        userServices.push({
+                            ...data,
+                            id: doc.id,
+                            tags: data.tags,
                         });
+                    });
 
-                        userServices.sort((a, b) => (b.createdAt as Date).getTime() - (a.createdAt as Date).getTime());
+                    userServices.sort((a, b) => (b.createdAt as Date).getTime() - (a.createdAt as Date).getTime());
 
-                        setServices(userServices);
-                    } else {
-                        toast({
-                            variant: "destructive",
-                            title: "Acesso negado!",
-                        });
-                    }
-                    setLoading(false);
-                });
-            } catch (error) {
-                console.error("Erro ao buscar serviços:", error);
-                toast({
-                    variant: "destructive",
-                    title: "Erro ao buscar serviços",
-                });
+                    setServices(userServices);
+                } else {
+                    toast({
+                        variant: "destructive",
+                        title: "Acesso negado!",
+                    });
+                }
                 setLoading(false);
-            }
-        };
+            });
+        } catch (error) {
+            console.error("Erro ao buscar serviços:", error);
+            toast({
+                variant: "destructive",
+                title: "Erro ao buscar serviços",
+            });
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         fetchServices();
     }, []);
+
 
     const totalPages = Math.ceil(services.length / servicesPerPage);
     const indexOfLastService = currentPage * servicesPerPage;
@@ -135,6 +137,7 @@ export default function MyServices() {
                                                 state={service.state}
                                                 postedDaysAgo={postedDaysAgo}
                                                 description={service.description || ""}
+                                                fetchServices={fetchServices}
                                                 className="aspect-w-1 aspect-h-1"
                                             />
                                         );
