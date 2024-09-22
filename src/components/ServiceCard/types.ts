@@ -1,6 +1,6 @@
 export type ServiceCardProps = {
-    imageSrc: string;
-    companyName: string;
+    imageSrc?: string;
+    companyName?: string;
     companySector: string;
     tags: string[];
     serviceTitle: string;

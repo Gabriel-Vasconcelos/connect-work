@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { collection, getDocs, Timestamp } from "firebase/firestore";
+import { collection, getDocs, Timestamp, doc, getDoc } from "firebase/firestore";
 import { db } from "@/services/firebase.config";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -26,19 +26,44 @@ export default function Feed() {
   const [currentPage, setCurrentPage] = useState(1); // Página atual
   const servicesPerPage = 8; // Defina quantos serviços por página
 
+  // Função para buscar os dados da empresa com base no userId
+  const fetchCompanyData = async (userId: string) => {
+    try {
+      const companyDoc = await getDoc(doc(db, "companies", userId));
+      if (companyDoc.exists()) {
+        return companyDoc.data();
+      } else {
+        console.error(`Empresa com ID ${userId} não encontrada`);
+        return null;
+      }
+    } catch (error) {
+      console.error("Erro ao buscar a empresa:", error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     const fetchServices = async () => {
       setLoading(true); // Define o estado de carregamento como verdadeiro
       try {
         const serviceCollection = collection(db, "services");
         const querySnapshot = await getDocs(serviceCollection);
-        const fetchedServices = querySnapshot.docs.map((doc) => {
-          const data = doc.data() as ServiceFormData;
-          if (data.createdAt instanceof Timestamp) {
-            data.createdAt = data.createdAt.toDate();
-          }
-          return data;
-        });
+        const fetchedServices = await Promise.all(
+          querySnapshot.docs.map(async (doc) => {
+            const data = doc.data() as ServiceFormData;
+            if (data.createdAt instanceof Timestamp) {
+              data.createdAt = data.createdAt.toDate();
+            }
+
+            // Busca os dados da empresa associada ao serviço
+            const companyData = await fetchCompanyData(data.userId);
+            return {
+              ...data,
+              companyName: companyData?.name || "Empresa desconhecida",
+              imageSrc: companyData?.profileImageUrl || "/assets/Saly-10.png", 
+            };
+          })
+        );
 
         // Ordena os serviços pela data de criação mais recente
         fetchedServices.sort((a, b) => (b.createdAt as Date).getTime() - (a.createdAt as Date).getTime());
@@ -145,7 +170,7 @@ export default function Feed() {
                 placeholder="Busque pelo nome do serviço"
                 value={searchTitle}
                 onChange={(e) => setSearchTitle(e.target.value)}
-                className="text-black pl-2 pr-8" 
+                className="text-black pl-2 pr-8"
               />
               <Search
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
@@ -220,8 +245,8 @@ export default function Feed() {
                   return (
                     <ServiceCard
                       key={index}
-                      imageSrc="/assets/Saly-10.png" // Ajuste conforme seus dados
-                      companyName={"Empresa teste" || "Empresa teste"}
+                      imageSrc={service.imageSrc} 
+                      companyName={service.companyName}
                       companySector={service.companySector || "Financeiro"}
                       tags={Array.isArray(service.tags) ? service.tags : []}
                       serviceTitle={service.serviceTitle}
