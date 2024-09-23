@@ -12,3 +12,15 @@ export type ServiceFormData = {
   imageSrc?: string;  // Propriedade adicionada
   companyName?: string;  // Propriedade adicionada
 }
+
+// Novo tipo para os dados da empresa
+export type CompanyData = {
+  name: string;
+  profileImageUrl: string;
+};
+
+// Tipo que combina ServiceFormData com os dados da empresa
+export type ServiceWithCompanyData = ServiceFormData & {
+  id: string;
+  companyData: CompanyData | null;
+};

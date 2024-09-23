@@ -1,26 +1,24 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { collection, getDocs, query, where, Timestamp } from "firebase/firestore";
+import { collection, getDocs, doc, getDoc, Timestamp, query, where, QueryDocumentSnapshot } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "@/services/firebase.config";
 import { NotebookPen } from "lucide-react";
-import Link from "next/link";  // Adicione o import para Link
+import Link from "next/link";
 import Menu from "@/components/Menu/Menu";
 import { Button } from "@/components/ui/button";
-import { ServiceFormData } from "../myservices/new/types";
+import { ServiceFormData, ServiceWithCompanyData, CompanyData } from "../myservices/new/types";
 import { ServiceCardUser } from "@/components/ServiceCardUser/ServiceCardUser";
 import { PaginationComponent } from "@/components/Pagination/Pagination";
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/hooks/use-toast";
 
 export default function MyServices() {
-    const [services, setServices] = useState<(ServiceFormData & { id: string })[]>([]);
+    const [services, setServices] = useState<ServiceWithCompanyData[]>([]);
     const [loading, setLoading] = useState(true);
     const { toast } = useToast();
     const [currentPage, setCurrentPage] = useState(1);
     const servicesPerPage = 8;
-
-
 
     const fetchServices = async () => {
         try {
@@ -28,27 +26,46 @@ export default function MyServices() {
             auth.onAuthStateChanged(async (user) => {
                 if (user) {
                     const uid = user.uid;
+                    console.log('User ID:', uid); // Log do user ID
+
                     const servicesRef = collection(db, "services");
                     const q = query(servicesRef, where("userId", "==", uid));
                     const querySnapshot = await getDocs(q);
 
-                    const userServices: (ServiceFormData & { id: string })[] = [];
-                    querySnapshot.forEach((doc) => {
-                        const data = doc.data() as ServiceFormData;
+                    const userServices: ServiceWithCompanyData[] = [];
+                    for (const docSnapshot of querySnapshot.docs) {
+                        const data = docSnapshot.data() as ServiceFormData;
 
                         if (data.createdAt instanceof Timestamp) {
                             data.createdAt = data.createdAt.toDate();
                         }
 
+                        // Buscando os dados da empresa usando o UID do usuário como ID do documento
+                        const companyDocRef = doc(db, "companies", uid);
+                        const companySnapshot = await getDoc(companyDocRef);
+
+                        let companyData: CompanyData | null = null;
+                        if (companySnapshot.exists()) {
+                            const companyDataDoc = companySnapshot.data() as CompanyData; // Especificando o tipo
+                            companyData = {
+                                name: companyDataDoc.name,
+                                profileImageUrl: companyDataDoc.profileImageUrl,
+                            };
+                            console.log('Dados da empresa:', companyData); // Log dos dados da empresa
+                        } else {
+                            console.log('Nenhuma empresa encontrada para o usuário:', uid); // Log se não encontrar empresa
+                        }
+
                         userServices.push({
                             ...data,
-                            id: doc.id,
+                            id: docSnapshot.id,
                             tags: data.tags,
+                            companyData,
                         });
-                    });
+                    }
 
                     userServices.sort((a, b) => (b.createdAt as Date).getTime() - (a.createdAt as Date).getTime());
-
+                    console.log('Serviços do usuário:', userServices); // Log dos serviços
                     setServices(userServices);
                 } else {
                     toast({
@@ -72,11 +89,12 @@ export default function MyServices() {
         fetchServices();
     }, []);
 
-
     const totalPages = Math.ceil(services.length / servicesPerPage);
     const indexOfLastService = currentPage * servicesPerPage;
     const indexOfFirstService = indexOfLastService - servicesPerPage;
     const currentServices = services.slice(indexOfFirstService, indexOfLastService);
+
+    console.log('Serviços atuais:', currentServices); // Log dos serviços que serão renderizados
 
     return (
         <div className="flex">
@@ -124,12 +142,14 @@ export default function MyServices() {
 
                                         const postedDaysAgo = Math.floor((Date.now() - createdAtDate.getTime()) / (1000 * 60 * 60 * 24));
 
+                                        console.log('Serviço atual:', service); // Log de cada serviço
+
                                         return (
                                             <ServiceCardUser
                                                 key={service.id}
                                                 serviceId={service.id}
-                                                imageSrc="/assets/Saly-10.png"
-                                                companyName="Empresa Teste"
+                                                imageSrc={service.companyData?.profileImageUrl || "/assets/Saly-10.png"}
+                                                companyName={service.companyData?.name || "Empresa Desconhecida"}
                                                 companySector={service.companySector}
                                                 tags={Array.isArray(service.tags) ? service.tags : service.tags ? service.tags.split(",").map(tag => tag.trim()) : []}
                                                 serviceTitle={service.serviceTitle}
