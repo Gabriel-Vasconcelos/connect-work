@@ -58,6 +58,8 @@ export const ServiceCardUser: React.FC<ServiceCardUserProps> = ({
                     className="w-16 h-16 rounded-full"
                     width={64}
                     height={64}
+                    quality={100}
+                    sizes="(max-width: 64px) 100vw, 64px"
                 />
                 <div>
                     <CardTitle className="text-lg font-bold">{companyName}</CardTitle>
