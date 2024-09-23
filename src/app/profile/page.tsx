@@ -24,6 +24,7 @@ export default function EditProfile() {
     const [selectedState, setSelectedState] = useState<string | null>(null);
     const [selectedCity, setSelectedCity] = useState<string | null>(null);
     const [profileImage, setProfileImage] = useState<File | null>(null);
+    const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null); // Novo estado para o profileImageUrl
     const { toast } = useToast();
 
     // Carregar estados ao montar o componente
@@ -54,7 +55,7 @@ export default function EditProfile() {
                     setValue("linkedin", userData.linkedin || "");
                     setValue("description", userData.description || "");
                     setValue("email", currentUser.email);
-
+                    setProfileImageUrl(userData.profileImageUrl); // Armazena a URL da imagem de perfil no estado
                     setProfileImage(userData.profileImageUrl);
 
                     setSelectedState(userData.state); // Definindo o estado selecionado
@@ -90,11 +91,11 @@ export default function EditProfile() {
         if (!userId) return;
 
         try {
-            let profileImageUrl = "";
-            if (profileImage) {
+            let newProfileImageUrl = profileImageUrl || ""; // Usa a URL já existente ou uma string vazia
+            if (profileImage && typeof profileImage === "object") {
                 const imageRef = ref(storage, `profiles/${userId}/${profileImage.name}`);
                 await uploadBytes(imageRef, profileImage);
-                profileImageUrl = await getDownloadURL(imageRef);
+                newProfileImageUrl = await getDownloadURL(imageRef);
             }
 
             const userRef = doc(db, "companies", userId);
@@ -106,12 +107,9 @@ export default function EditProfile() {
                 website: data.website || "",
                 linkedin: data.linkedin || "",
                 description: data.description,
-                profileImageUrl
+                profileImageUrl: newProfileImageUrl, // Atualiza com a nova URL da imagem
             });
 
-            // Aqui você pode adicionar a lógica para fazer o upload da nova imagem de perfil
-
-            window.location.reload();
             toast({
                 title: "Perfil atualizado com sucesso!",
               });
