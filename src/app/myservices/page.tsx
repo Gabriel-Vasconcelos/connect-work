@@ -26,7 +26,6 @@ export default function MyServices() {
             auth.onAuthStateChanged(async (user) => {
                 if (user) {
                     const uid = user.uid;
-                    console.log('User ID:', uid); // Log do user ID
 
                     const servicesRef = collection(db, "services");
                     const q = query(servicesRef, where("userId", "==", uid));
@@ -51,7 +50,6 @@ export default function MyServices() {
                                 name: companyDataDoc.name,
                                 profileImageUrl: companyDataDoc.profileImageUrl,
                             };
-                            console.log('Dados da empresa:', companyData); // Log dos dados da empresa
                         } else {
                             console.log('Nenhuma empresa encontrada para o usuário:', uid); // Log se não encontrar empresa
                         }
@@ -65,7 +63,6 @@ export default function MyServices() {
                     }
 
                     userServices.sort((a, b) => (b.createdAt as Date).getTime() - (a.createdAt as Date).getTime());
-                    console.log('Serviços do usuário:', userServices); // Log dos serviços
                     setServices(userServices);
                 } else {
                     toast({
@@ -76,7 +73,6 @@ export default function MyServices() {
                 setLoading(false);
             });
         } catch (error) {
-            console.error("Erro ao buscar serviços:", error);
             toast({
                 variant: "destructive",
                 title: "Erro ao buscar serviços",
@@ -93,8 +89,6 @@ export default function MyServices() {
     const indexOfLastService = currentPage * servicesPerPage;
     const indexOfFirstService = indexOfLastService - servicesPerPage;
     const currentServices = services.slice(indexOfFirstService, indexOfLastService);
-
-    console.log('Serviços atuais:', currentServices); // Log dos serviços que serão renderizados
 
     return (
         <div className="flex">
@@ -141,8 +135,6 @@ export default function MyServices() {
                                             : (service.createdAt as Date);
 
                                         const postedDaysAgo = Math.floor((Date.now() - createdAtDate.getTime()) / (1000 * 60 * 60 * 24));
-
-                                        console.log('Serviço atual:', service); // Log de cada serviço
 
                                         return (
                                             <ServiceCardUser
