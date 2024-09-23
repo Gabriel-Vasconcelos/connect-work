@@ -19,13 +19,20 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
     return (
         <Card className={`bg-white flex flex-col ${className}`}>
             <CardHeader className="flex items-center gap-4 flex-row">
-                <Image
-                    src={imageSrc}
-                    alt={`${companyName} logo`}
-                    className="w-16 h-16 rounded-full"
-                    width={64}
-                    height={64}
-                />
+                {imageSrc ? (
+                    <Image
+                        src={imageSrc}
+                        alt={`${companyName} logo`}
+                        className="w-16 h-16 rounded-full"
+                        width={64}
+                        height={64}
+                        quality={100}
+                        sizes="(max-width: 64px) 100vw, 64px"
+                    />
+                ) : (
+                    <div className="w-16 h-16 rounded-full bg-gray-200" />
+                )}
+
                 <div>
                     <CardTitle className="text-lg font-bold">{companyName}</CardTitle>
                     <p className="text-sm text-gray-600">{companySector}</p>
