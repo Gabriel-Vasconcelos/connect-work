@@ -14,16 +14,17 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { RegisterFormData } from "@/components/RegisterForm/types";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { useToast } from "@/hooks/use-toast";
 
 export default function EditProfile() {
     const { handleSubmit, register, setValue, formState: { errors } } = useForm<RegisterFormData>();
     const [userId, setUserId] = useState<string | null>(null);
     const [states, setStates] = useState<{ id: number, nome: string, sigla: string }[]>([]);
     const [cities, setCities] = useState<{ id: number, nome: string }[]>([]);
-
     const [selectedState, setSelectedState] = useState<string | null>(null);
     const [selectedCity, setSelectedCity] = useState<string | null>(null);
     const [profileImage, setProfileImage] = useState<File | null>(null);
+    const { toast } = useToast();
 
     // Carregar estados ao montar o componente
     useEffect(() => {
@@ -111,7 +112,9 @@ export default function EditProfile() {
             // Aqui você pode adicionar a lógica para fazer o upload da nova imagem de perfil
 
             window.location.reload();
-            console.log("Perfil atualizado com sucesso!");
+            toast({
+                title: "Perfil atualizado com sucesso!",
+              });
         } catch (error) {
             console.error("Erro ao atualizar o perfil:", error);
         }
