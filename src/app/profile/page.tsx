@@ -113,6 +113,7 @@ export default function EditProfile() {
             toast({
                 title: "Perfil atualizado com sucesso!",
               });
+              window.location.reload();
         } catch (error) {
             console.error("Erro ao atualizar o perfil:", error);
         }
@@ -144,8 +145,9 @@ export default function EditProfile() {
                                 src={typeof profileImage === "object" ? URL.createObjectURL(profileImage) : profileImage}
                                 alt="Profile"
                                 layout="fill"
-                                objectFit="cover" 
                                 className="w-full h-full object-cover rounded-full border-2 border-gray-300 transition-all duration-300 group-hover:opacity-80"
+                                sizes="(max-width: 64px) 100vw, 64px"
+                                priority
                             />
                         )}
                         <div className={`${profileImage ? 'hidden' : 'flex'} absolute w-full h-full items-center justify-center transition-all duration-300 group-hover:flex`}>
