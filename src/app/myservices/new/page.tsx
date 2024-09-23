@@ -83,7 +83,7 @@ export default function New() {
     <>
       <Menu />
 
-      <div className="pt-28 md:pt-6 md:ml-64 md:mt-0 p-6 bg-[#082F49] min-h-screen overflow-x-hidden">
+      <div className="pt-28 md:pt-6 md:ml-56 md:mt-0 p-6 bg-[#082F49] min-h-screen overflow-x-hidden">
         <div className="max-w-4xl mx-auto">
           {/* Título com Ícone e Linha Centralizado */}
           <div className="flex flex-col items-center mb-6 md:mt-8">
