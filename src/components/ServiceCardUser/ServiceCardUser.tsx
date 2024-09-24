@@ -91,16 +91,16 @@ export const ServiceCardUser: React.FC<ServiceCardUserProps> = ({
                 </p>
             </CardContent>
 
-            <CardFooter className="flex justify-between">
+            <CardFooter className="flex justify-between gap-6">
                 <Button onClick={handleEdit} className="bg-cyan-500 text-white font-semibold md:text-md hover:bg-cyan-700 w-1/2">
                     Editar
                 </Button>
                 {/* Botão para abrir o diálogo de exclusão */}
                 <Dialog open={openDialog} onOpenChange={setOpenDialog}>
                     <DialogTrigger asChild>
-                        <button className="text-red-500 font-semibold md:text-md hover:text-red-700 w-1/2 hover:border-red-500">
+                        <Button className="text-red-500 border border-red-500 rounded-md font-semibold md:text-md w-1/2 bg-transparent hover:bg-transparent hover:border-red-700 hover:text-red-700 ">
                             Excluir
-                        </button>
+                        </Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogHeader>
