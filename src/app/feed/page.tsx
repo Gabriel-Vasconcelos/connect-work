@@ -107,8 +107,8 @@ export default function Feed() {
         ? service.model.toLowerCase().includes(model.toLowerCase())
         : false;
 
-      const matchesCity = city
-        ? service.city.toLowerCase().includes(city.toLowerCase())
+        const matchesCity = city
+        ? city.toLowerCase().split(" ").some(part => service.city.toLowerCase().includes(part))
         : false;
 
       const matchesState = state
