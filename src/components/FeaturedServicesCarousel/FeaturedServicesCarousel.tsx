@@ -95,7 +95,7 @@ export const FeaturedServicesCarousel = () => {
                   return (
                     <CarouselItem className="lg:basis-1/2">
                       <ServiceCard
-                        key={index}
+                        key={service.userId || index}
                         service={service}
                         company={service.company}
                         companySector={service.companySector || "Financeiro"}
