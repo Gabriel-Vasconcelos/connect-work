@@ -4,6 +4,7 @@ import { FeaturedServicesCarousel } from "@/components/FeaturedServicesCarousel"
 import { FeaturedText } from "@/components/FeaturedText";
 import { FiftyFifty } from "@/components/FiftyFifty";
 import { Hero } from "@/components/Hero";
+import { OurPlans } from "@/components/OurPlans";
 import { UnauthenticatedHeader } from "@/components/UnauthenticatedHeader";
 
 export default function Home() {
@@ -18,6 +19,9 @@ export default function Home() {
       {/* <FiftyFifty className="bg-sky-950 text-white" image="/assets/illustration-1.png" imagePosition="right" title="Porque escolher a Connect Work?" description="A Connect Work não é apenas mais uma plataforma de conexão de serviços—é a solução que sua empresa precisa para transformar desafios em oportunidades. Escolher a ConnectWork significa optar por eficiência e resultados que realmente fazem a diferença." /> */}
       <div id="question">
         <FeaturedText imageSrc="/assets/group-people.png" title="Por que escolher a ConnectWork?" description="A ConnectWork não é apenas mais uma plataforma de conexão de serviços—é a solução que sua empresa precisa para transformar desafios em oportunidades. Escolher a ConnectWork significa optar por eficiência, segurança e resultados que realmente fazem a diferença." />
+      </div>
+      <div className="mt-10 lg:mt-20">
+        <OurPlans />
       </div>
       <FeaturedServicesCarousel />
       <div id="contact">
