@@ -1,26 +1,33 @@
-export type ServiceFormData = {
-  serviceTitle: string;
-  companySector: string;
-  model: string;
-  city: string;
-  state: string;
-  contact: string;
-  tags: string;
+export interface ServiceFormData {
   description: string;
-  createdAt?: Date;
+  serviceTitle: string;
+  state: string;
+  companySector: string;
+  contact: string;
+  model: string;
   userId: string;
-  imageSrc?: string;  // Propriedade adicionada
-  companyName?: string;  // Propriedade adicionada
+  tags: string[];
+  createdAt: Date | string;
+  city: string;
+  service: any; // Referência ao próprio serviço
+  company: {
+    name: string;
+    email: string;
+    linkedin: string;
+    description: string;
+    whatsapp?: string;
+    state: string;
+    cnpj: string;
+    city: string;
+    instagram?: string;
+    services?: string[];
+    website?: string;
+    createdAt?: {
+      seconds: number;
+      nanoseconds: number;
+    };
+    phone?: string;
+    profileImageUrl?: string;
+    isSubscribed?: boolean;
+  };
 }
-
-// Novo tipo para os dados da empresa
-export type CompanyData = {
-  name: string;
-  profileImageUrl: string;
-};
-
-// Tipo que combina ServiceFormData com os dados da empresa
-export type ServiceWithCompanyData = ServiceFormData & {
-  id: string;
-  companyData: CompanyData | null;
-};

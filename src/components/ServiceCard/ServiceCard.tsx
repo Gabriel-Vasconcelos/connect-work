@@ -1,73 +1,69 @@
+// src/components/ServiceCard/ServiceCard.tsx
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { ServiceCardProps } from "./types";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { ServiceDetailsDrawer } from "@/components/ServiceDetailsDrawer";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { getInitials } from "@/lib/utils";
 
 export const ServiceCard: React.FC<ServiceCardProps> = ({
-    imageSrc,
-    companyName,
-    companySector,
-    tags,
-    serviceTitle,
-    city,
-    state,
-    postedDaysAgo,
-    description,
-    className
+  companySector,
+  tags,
+  serviceTitle,
+  city,
+  state,
+  postedDaysAgo,
+  description,
+  service,
+  company,
+  className
 }) => {
-    return (
-        <Card className={`bg-white flex flex-col ${className}`}>
-            <CardHeader className="flex items-center gap-4 flex-row">
-                {imageSrc ? (
-                    <Image
-                        src={imageSrc}
-                        alt={`${companyName} logo`}
-                        className="w-16 h-16 rounded-full"
-                        width={64}
-                        height={64}
-                        quality={100}
-                        sizes="(max-width: 64px) 100vw, 64px"
-                    />
-                ) : (
-                    <div className="w-16 h-16 rounded-full bg-gray-200" />
-                )}
+  return (
+    <Card className={`bg-white flex flex-col ${className}`}>
+      <CardHeader className="flex items-center gap-4 flex-row">
 
-                <div>
-                    <CardTitle className="text-lg font-bold">{companyName}</CardTitle>
-                    <p className="text-sm text-gray-600">{companySector}</p>
-                </div>
-            </CardHeader>
+        <Avatar className="mt-3 shadow-lg w-16 h-16">
+          <AvatarImage width={64} height={64} src={company?.profileImageUrl} alt={`${company?.name} logo`} />
+          <AvatarFallback className="uppercase">
+            {company ? getInitials(company.name) : "EM"}
+          </AvatarFallback>
+        </Avatar>
 
-            <CardContent className="flex-1 space-y-4">
-                <div className="flex flex-wrap gap-2 mb-2">
-                    {tags.length > 0 ? (
-                        tags.map((tag, index) => (
-                            <Badge key={index} className="bg-cyan-800 hover:bg-cyan-500 text-white rounded">
-                                {tag}
-                            </Badge>
-                        ))
-                    ) : (
-                        <p className="text-gray-500">Nenhuma tag disponível</p>
-                    )}
-                </div>
+        <div>
+          <CardTitle className="text-lg font-bold">{company?.name || "Empresa"}</CardTitle>
+          <p className="text-sm text-gray-600">{companySector}</p>
+        </div>
+      </CardHeader>
 
-                <h3 className="text-xl font-semibold text-black mb-2">{serviceTitle}</h3>
+      <CardContent className="flex-1 space-y-4">
+        <div className="flex flex-wrap gap-2 mb-2">
+          {tags.length > 0 ? (
+            tags.map((tag, index) => (
+              <Badge key={index} className="bg-cyan-800 hover:bg-cyan-500 text-white rounded">
+                {tag}
+              </Badge>
+            ))
+          ) : (
+            <p className="text-gray-500">Nenhuma tag disponível</p>
+          )}
+        </div>
 
-                <p className="text-sm text-gray-500 mb-2">
-                    {city} - {state} / postada há {postedDaysAgo} dias
-                </p>
+        <h3 className="text-xl font-semibold text-black mb-2">{serviceTitle}</h3>
 
-                <p className="text-base text-black mb-4 line-clamp-3">
-                    {description}
-                </p>
-            </CardContent>
+        <p className="text-sm text-gray-500 mb-2">
+          {city} - {state} / {postedDaysAgo > 0 ? `postada há ${postedDaysAgo} dias` : "hoje"}
+        </p>
 
-            <CardFooter>
-                <Button className="bg-cyan-500 font-semibold hover:bg-cyan-700 transition duration-200 text-white w-full">
-                    Saiba mais
-                </Button>
-            </CardFooter>
-        </Card>
-    );
+        <p className="text-base text-black mb-4 line-clamp-3">
+          {description}
+        </p>
+      </CardContent>
+
+      <CardFooter>
+        {/* Adiciona o Drawer aqui */}
+        <ServiceDetailsDrawer service={service} company={company} />
+      </CardFooter>
+    </Card>
+  );
 };

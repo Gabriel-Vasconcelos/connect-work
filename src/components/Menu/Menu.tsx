@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { getInitials } from "@/lib/utils";
 
 export default function Menu() {
     const [user, setUser] = useState<any>(null);
@@ -37,18 +38,8 @@ export default function Menu() {
         return () => unsubscribe(); // Limpar o listener
     }, []);
 
-    // Função para pegar as iniciais
-    const getInitials = (name: string) => {
-        const words = name.split(' ');
-        if (words.length === 1) {
-            return (words[0].charAt(0) + words[0].charAt(1)).toUpperCase();
-        } else {
-            return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase();
-        }
-    };
-
     return (
-        <div className="w-full md:w-56 lg:w-68 bg-white fixed md:h-full h-auto overflow-auto z-50">
+        <div className="w-full md:w-56 lg:w-68 bg-white fixed top-0 left-0 md:h-full h-auto overflow-auto z-50">
             {/* Imagem e informações da empresa com sombra */}
             <a href="/profile" title="Meu Perfil" className="hidden sm:flex items-center p-4 md:p-3 lg:p-4 border-b-2">
                 <Avatar className="mt-3 shadow-lg">
