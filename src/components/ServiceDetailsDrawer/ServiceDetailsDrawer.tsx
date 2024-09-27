@@ -116,7 +116,7 @@ export const ServiceDetailsDrawer: React.FC<ServiceDetailsDrawerProps> = ({ serv
                     Chat com a empresa
                   </Button> */}
                   {company.phone && (
-                    <Button className="bg-sky-500 text-white">
+                    <Button className="bg-sky-500 lg:hover:bg-sky-600 text-white">
                       <a className="flex items-center gap-x-2" href={`https://wa.me/${company.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(generateWhatsAppMessage())}`} target="_blank" rel="noopener noreferrer">
                         <FaWhatsapp className="w-6 h-6" /> Contato via WhatsApp
                       </a>
