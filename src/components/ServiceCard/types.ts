@@ -1,12 +1,31 @@
 export type ServiceCardProps = {
-    imageSrc?: string;
-    companyName?: string;
-    companySector: string;
-    tags: string[];
-    serviceTitle: string;
-    city: string;
-    state: string;
-    postedDaysAgo: number;
+  companySector: string;
+  tags: string[];
+  serviceTitle: string;
+  city: string;
+  state: string;
+  description: string;
+  service: any;
+  company: {
+    name: string;
+    email: string;
+    linkedin: string;
     description: string;
-    className?: string;
+    whatsapp?: string;
+    state: string;
+    cnpj: string;
+    city: string;
+    instagram?: string;
+    services?: string[];
+    website?: string;
+    createdAt?: {
+      seconds: number;
+      nanoseconds: number;
+    };
+    phone?: string;
+    profileImageUrl?: string;
+    isSubscribed?: boolean;
   };
+  className?: string;
+  postedDaysAgo: number;
+};

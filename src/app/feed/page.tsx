@@ -59,8 +59,7 @@ export default function Feed() {
             const companyData = await fetchCompanyData(data.userId);
             return {
               ...data,
-              companyName: companyData?.name || "Empresa desconhecida",
-              imageSrc: companyData?.profileImageUrl || "/assets/Saly-10.png", 
+              company: companyData
             };
           })
         );
@@ -68,8 +67,8 @@ export default function Feed() {
         // Ordena os serviços pela data de criação mais recente
         fetchedServices.sort((a, b) => (b.createdAt as Date).getTime() - (a.createdAt as Date).getTime());
 
-        setAllServices(fetchedServices);
-        setServices(fetchedServices); // Inicialmente exibe todos os serviços
+        setAllServices(fetchedServices as ServiceFormData[]);
+        setServices(fetchedServices as ServiceFormData[]); // Inicialmente exibe todos os serviços
       } catch (error) {
         console.error("Erro ao buscar os serviços: ", error);
       } finally {
@@ -107,7 +106,7 @@ export default function Feed() {
         ? service.model.toLowerCase().includes(model.toLowerCase())
         : false;
 
-        const matchesCity = city
+      const matchesCity = city
         ? city.toLowerCase().split(" ").some(part => service.city.toLowerCase().includes(part))
         : false;
 
@@ -245,8 +244,8 @@ export default function Feed() {
                   return (
                     <ServiceCard
                       key={index}
-                      imageSrc={service.imageSrc} 
-                      companyName={service.companyName}
+                      service={service}
+                      company={service.company}
                       companySector={service.companySector || "Financeiro"}
                       tags={Array.isArray(service.tags) ? service.tags : []}
                       serviceTitle={service.serviceTitle}
