@@ -6,7 +6,7 @@ export interface ServiceFormData {
   contact: string;
   model: string;
   userId: string;
-  tags: string[];
+  tags: string;
   createdAt: Date | string;
   city: string;
   service: any; // Referência ao próprio serviço
