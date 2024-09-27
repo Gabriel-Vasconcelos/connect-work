@@ -31,3 +31,13 @@ export interface ServiceFormData {
     isSubscribed?: boolean;
   };
 }
+
+export type CompanyData = {
+  name: string;
+  profileImageUrl: string;
+};
+
+export type ServiceWithCompanyData = ServiceFormData & {
+  id: string;
+  companyData: CompanyData | null;
+};
