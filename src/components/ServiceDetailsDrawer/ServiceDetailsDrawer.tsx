@@ -32,12 +32,17 @@ export const ServiceDetailsDrawer: React.FC<ServiceDetailsDrawerProps> = ({ serv
 
           <DrawerContent className="h-[95vh]">
             <DrawerHeader>
-              <DrawerClose className="ml-auto">
-                <Button variant="outline">
-                  <XIcon />
-                </Button>
-              </DrawerClose>
+              <div className="flex justify-between items-center w-full">
+                <h2 className=" text-xl md:text-2xl font-semibold">Detalhes do serviço</h2>
+                <DrawerClose className="ml-auto">
+                  <Button variant="outline">
+                    <XIcon />
+                  </Button>
+                </DrawerClose>
+              </div>
             </DrawerHeader>
+
+            <Separator />
 
             <div className="pb-10 overflow-y-auto">
               {/* Seção de informações da empresa */}
