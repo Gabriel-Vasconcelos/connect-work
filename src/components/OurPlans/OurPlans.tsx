@@ -45,9 +45,9 @@ export const OurPlans = () => {
     <section className="site--container pb-20 flex flex-col justify-center items-center">
       <h2 className="text-center text-5xl font-bold mb-10 lg:text-6xl lg:mb-20">Nossos Planos</h2>
       <div className="grid items-center justify-center gap-y-5 md:gap-x-10 md:grid-cols-2 xl:grid-cols-3">
-        {plans?.map((plan: any) => {
+        {plans?.map((plan: any, index: number) => {
           return (
-            <Card className="h-full bg-sky-900 text-white py-10">
+            <Card key={`card-${index}`} className="h-full bg-sky-900 text-white py-10">
               <CardContent className="flex flex-col">
                 <h3 className="text-3xl font-semibold mb-0.5">{plan.title}</h3>
                 <p className="text-gray-300 mb-8 text-lg flex gap-x-2">
@@ -55,9 +55,9 @@ export const OurPlans = () => {
                   <span className="text-white">{plan.price}</span>
                 </p>
                 <div className="text-lg">
-                  {plan?.points.map((point: any) => {
+                  {plan?.points.map((point: any, index: number) => {
                     return (
-                      <p className="flex gap-x-2">
+                      <p key={`point-${index}`} className="flex gap-x-2">
                         <span>{`>`}</span>
                         {point}
                       </p>
