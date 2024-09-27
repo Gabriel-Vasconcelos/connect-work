@@ -47,7 +47,7 @@ export default function EditService() {
                                 Object.keys(data).forEach((key) => {
                                     if (key === 'tags' && Array.isArray(data.tags)) {
                                         // Converte o array de tags para uma string separada por vírgulas
-                                        setValue('tags', data.tags.join(', '));
+                                        setValue('tags', data.tags);
                                     } else {
                                         setValue(key as keyof ServiceFormData, data[key as keyof ServiceFormData] || '');
                                     }
@@ -96,10 +96,10 @@ export default function EditService() {
     const onSubmit: SubmitHandler<ServiceFormData> = async (data: ServiceFormData) => {
         try {
             // Garantir que o campo de tags seja um array
-            const tagsValue = data.tags;
+            const tagsValue: any = data.tags;
             const transformedData = {
                 ...data,
-                tags: typeof tagsValue === 'string' ? tagsValue.split(',').map(tag => tag.trim()) : []
+                tags: typeof tagsValue === 'string' ? tagsValue.split(',').map((tag: any) => tag.trim()) : []
             };
 
             const docRef = doc(db, "services", id);
