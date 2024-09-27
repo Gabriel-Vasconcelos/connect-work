@@ -17,7 +17,7 @@ const Register = () => {
   const [signInWithGoogle] = useSignInWithGoogle(auth);
   const { toast } = useToast();
   const router = useRouter();
-  
+
   const handleGoogleSignIn = async () => {
 
     try {
@@ -60,8 +60,8 @@ const Register = () => {
   };
 
   return (
-    <div className="flex max-h-[90vh] lg:overflow-hidden">
-      <div className="max-lg:hidden overflow-hidden relative w-1/5 h-[90vh] flex flex-col items-center justify-center bg-sky-950">
+    <div className="flex max-h-[90vh]">
+      <div className="max-lg:hidden relative w-1/5 h-[90vh] flex flex-col items-center justify-center bg-sky-950">
         <Image className="h-full object-cover opacity-90" src="/assets/low-angle-view-businesswoman-standing-front-office-building.jpg" alt="Imagem" width={5000} height={3333} />
         <div className="absolute mx-auto bottom-20 grid grid-flow-col items-center flex-wrap gap-x-4 mt-5">
           {/* <Button size="lg" variant="secondary" className="py-8 group"><FaFacebook color="blue" className="lg:group-hover:size-9" size="28" /></Button> */}

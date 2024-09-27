@@ -173,7 +173,7 @@ export const RegisterForm = () => {
   }
 
   return (
-    <section className="site--container py-10 overflow-auto">
+    <section className="site--container py-10">
       <div>
         <h1 className="text-4xl font-bold col-span-2">Crie uma Conta!</h1>
         <p className="text-lg mt-2 mb-8 flex justify-start items-center flex-wrap gap-x-1">
@@ -181,7 +181,7 @@ export const RegisterForm = () => {
           <Link href="/login" className="opacity-60 text-sky-600 w-fit lg:hover:opacity-100" title="logar">Entre aqui!</Link>
         </p>
       </div>
-      <form onSubmit={handleSubmit(onSubmit, onError)} className="lg:max-h-[90vh] grid gap-y-5 w-full border border-gray-200 rounded-md p-10">
+      <form onSubmit={handleSubmit(onSubmit, onError)} className="overflow-y-auto grid gap-y-5 w-full border border-gray-200 rounded-md p-10 lg:max-h-[70vh]">
         <div className="grid lg:grid-cols-[auto_1fr] gap-4">
           <label htmlFor="profileImage" className="group cursor-pointer relative flex items-center justify-center w-36 h-36 rounded-full border-2 border-gray-300 bg-gray-100 text-gray-500">
             <Input
