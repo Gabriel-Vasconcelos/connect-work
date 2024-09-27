@@ -93,9 +93,8 @@ export const FeaturedServicesCarousel = () => {
 
                   const postedDaysAgo = Math.floor((Date.now() - createdAtDate.getTime()) / (1000 * 60 * 60 * 24));
                   return (
-                    <CarouselItem className="lg:basis-1/2">
+                    <CarouselItem key={service.userId || index} className="lg:basis-1/2">
                       <ServiceCard
-                        key={service.userId || index}
                         service={service}
                         company={service.company}
                         companySector={service.companySector || "Financeiro"}
