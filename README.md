@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🌐 Plataforma de Conexão de Empresas
+Este projeto é uma plataforma digital que conecta empresas por meio de solicitações e ofertas de serviços. Foi desenvolvido como parte da disciplina **Projeto Integrado 2** do curso de **Sistemas e Mídias Digitais** da **Universidade Federal do Ceará (UFC)**. O objetivo da disciplina é criar um produto digital que resolva algum problema real. No nosso caso, criamos uma plataforma que facilita a comunicação entre empresas que necessitam de serviços e aquelas que podem fornecê-los.
 
-## Getting Started
+## 🛠 Tecnologias Utilizadas
+- **Next.js 14**: Framework React para desenvolvimento web.
+- **React Hook Form**: Gerenciamento de formulários e validação.
+- **Shadcn/ui**: Biblioteca de componentes de UI.
+- **TailwindCSS**: Framework CSS para estilização.
+- **Firebase**: Backend as a Service (BaaS) com:
+  - Firestore (banco de dados NoSQL).
+  - Authentication (autenticação com email/senha e Google OAuth).
+  - Storage (armazenamento de arquivos).
+- **Vercel**: Hospedagem da aplicação.
 
-First, run the development server:
+## 🚀 Funcionalidades Principais
 
-```bash
+- **Cadastro e Login**:
+  - Cadastro tradicional com email e senha, ou via conta Google.
+  - Login pelo fluxo tradicional ou pelo Google OAuth.
+
+- **Feed de Serviços**:
+  - Exibição de serviços solicitados por outras empresas.
+-   Pesquisa por nome de serviço e uso de filtros (tags, modelo presencial/remoto).
+
+- **Detalhes do Serviço**:
+  - Visualização de informações detalhadas sobre os serviços e a empresa solicitante.
+  - Contato direto com a empresa via WhatsApp.
+
+- **Cadastro de Serviços**:
+  - Cadastrar solicitações de serviço.
+  - Gerenciar serviços (visualizar, editar e excluir serviços cadastrados).
+
+- **Perfil de Empresa**:
+  - Editar informações do perfil da empresa (nome, descrição, imagem de perfil, etc).
+
+- **Middleware de Autenticação**:
+  - Controle de acesso para rotas protegidas com middleware de autenticação do Next.js.
+
+ ## 📹 Demonstração em Vídeo
+
+ ## 🚀 Deploy
+A aplicação está hospedada na Vercel e você pode acessá-la diretamente [aqui](https://connect-work.vercel.app/).
+
+## 🚧 Como Rodar o Projeto Localmente
+Siga os passos abaixo para rodar o projeto localmente:
+
+1. Clone o repositório:
+
+```
+git clone git@github.com:Gabriel-Vasconcelos/connect-work.git
+```
+
+2. Instale as dependências:
+```
+npm install
+# ou
+yarn install
+# ou
+pnpm install
+```
+
+3. Configure as variáveis de ambiente no arquivo ```.env.local``` com as credenciais do Firebase (Exemplo em ```.env.example```).
+
+4. Execute o servidor de desenvolvimento:
+
+```
 npm run dev
-# or
+# ou
 yarn dev
-# or
+# ou
 pnpm dev
-# or
+# ou
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse http://localhost:3000 para visualizar a aplicação.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## 👥 Desenvolvedores
+- Gabriel Vasconcelos - [GitHub](https://github.com/Gabriel-Vasconcelos)
+- Gabriel Vieira - [GitHub](https://github.com/iAmBiel)
